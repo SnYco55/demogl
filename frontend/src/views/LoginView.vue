@@ -1,16 +1,11 @@
 <template>
   <div>
-    <h1>Home</h1>
-
-    <MemberList/>
+   <h1>Login</h1>
   </div>
 </template>
 
 <script>
-import MemberList from "@/components/MemberList.vue";
-
 export default {
-  components: {MemberList},
   setup() {
 
 
