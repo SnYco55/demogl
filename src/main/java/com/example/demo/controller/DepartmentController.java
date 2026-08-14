@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.DepartmentEntity;
+import com.example.demo.entity.FacultyEntity;
 import com.example.demo.service.DepartmentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,9 @@ public class DepartmentController {
     public List<DepartmentEntity> getDepartments() { return service.getDepartments(); }
 
     @GetMapping("/{id}")
-    public DepartmentEntity getDepartmentById(@PathVariable String id) { return service.getDepartmentById(id); };
+    public DepartmentEntity getDepartmentById(@PathVariable String id) { return service.getDepartmentById(id); }
+
+    @GetMapping("/{id}/faculty")
+    public FacultyEntity getFacultyByDepartmentId(@PathVariable String id) { return service.getFacultyByDepartmentId(id); }
 
 }

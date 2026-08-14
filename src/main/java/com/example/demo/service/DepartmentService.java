@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.DepartmentEntity;
+import com.example.demo.entity.FacultyEntity;
 import org.springframework.stereotype.Service;
 import com.example.demo.repository.DepartmentRepository;
 
@@ -20,4 +21,12 @@ public class DepartmentService {
     }
 
     public DepartmentEntity getDepartmentById(String id) { return repository.findById(id).orElse(null); }
+
+    public FacultyEntity getFacultyByDepartmentId(String id) {
+        DepartmentEntity department = repository.findById(id).orElse(null);
+        if (department != null) {
+            return department.getFaculty();
+        }
+        return null;
+    }
 }

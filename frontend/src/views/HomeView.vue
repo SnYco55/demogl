@@ -1,24 +1,16 @@
 <template>
   <div>
-    <h1>Home</h1>
-
-    <MemberList/>
+    <MemberList />
   </div>
 </template>
 
 <script>
-import MemberList from "@/components/MemberList.vue";
+import MemberList from '@/components/MemberList.vue'
 
 export default {
-  components: {MemberList},
+  components: { MemberList },
   setup() {
-
-
     return {}
-  }
+  },
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

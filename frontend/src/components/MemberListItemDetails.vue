@@ -1,0 +1,140 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const props = defineProps({
+  member: {
+    type: Object,
+    required: true,
+  },
+})
+
+const faculties = ref({})
+const directors = ref({})
+
+function formatDate(date) {
+  if (!date) return '—'
+
+  return new Intl.DateTimeFormat('fr-BE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(new Date(date))
+}
+
+async function fetchFaculty(departmentId) {
+  if (faculties.value[departmentId]) {
+    return
+  }
+
+  const response = await fetch(`http://localhost:8080/departments/${departmentId}/faculty`)
+
+  faculties.value[departmentId] = await response.json()
+}
+
+async function fetchDirector(directorId) {
+  if (!directorId || directors.value[directorId]) {
+    return
+  }
+
+  const response = await fetch(`http://localhost:8080/members/${directorId}`)
+
+  if (!response.ok) {
+    throw new Error('Impossible de récupérer le directeur')
+  }
+
+  directors.value[directorId] = await response.json()
+}
+
+onMounted(async () => {
+  await Promise.all(
+    props.member.services.flatMap((service) => [
+      fetchFaculty(service.departmentId),
+      fetchDirector(service.directorId),
+    ]),
+  )
+})
+</script>
+
+<template>
+  <div class="space-y-6">
+    <!-- Header -->
+    <header class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <p class="text-sm font-medium text-gray-500">Membre #{{ member.id }}</p>
+
+      <h1 class="mt-1 text-3xl font-bold text-gray-900">
+        {{ member.firstname }} {{ member.lastname }}
+      </h1>
+
+      <div class="mt-4 flex gap-6 text-sm text-gray-600">
+        <p>
+          <span class="font-medium text-gray-900">Début :</span>
+          {{ formatDate(member.start) }}
+        </p>
+
+        <p>
+          <span class="font-medium text-gray-900">Fin :</span>
+          {{ formatDate(member.end) }}
+        </p>
+      </div>
+    </header>
+
+    <!-- Roles -->
+    <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h2 class="text-lg font-semibold text-gray-900">Rôles</h2>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span
+          v-for="role in member.roles"
+          :key="role.id"
+          class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700"
+        >
+          {{ role.name }}
+        </span>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h2 class="text-lg font-semibold text-gray-900">Services</h2>
+
+      <div class="mt-4 space-y-3">
+        <div
+          v-for="service in member.services"
+          :key="service.id"
+          class="rounded-xl border border-gray-100 bg-gray-50 p-4"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="font-semibold text-gray-900">
+                {{ service.name }}
+              </h3>
+
+              <p class="mt-1 text-sm text-gray-500">Département : {{ service.departmentId }}</p>
+
+              <p class="text-sm text-gray-500">
+                Faculté :
+                {{ faculties[service.departmentId]?.name ?? 'Chargement...' }}
+              </p>
+
+              <p class="text-sm text-gray-500">
+                Directeur :
+                {{
+                  directors[service.directorId]
+                    ? `${directors[service.directorId].firstname} ${directors[service.directorId].lastname}`
+                    : 'Chargement...'
+                }}
+              </p>
+            </div>
+
+            <span
+              v-if="member.directedServiceIds?.includes(service.id)"
+              class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700"
+            >
+              Directeur
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>

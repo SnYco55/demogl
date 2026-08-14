@@ -14,6 +14,8 @@ import java.util.Set;
         "lastname",
         "start",
         "end",
+        "services",
+        "roles",
         "createdAt",
 })
 
@@ -76,5 +78,10 @@ public class MemberEntity {
     public void setEnd(LocalDateTime end) { this.end = end; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public Set<ServiceEntity> getServices() { return services; }
+
+    public Set<RoleEntity> getRoles() { return roles; }
+
 
 }
