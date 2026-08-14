@@ -2,10 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.MemberEntity;
 import com.example.demo.service.MemberService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +18,8 @@ public class MemberController {
     }
 
     @GetMapping
-    public List<MemberEntity> getMembers() {
-        return service.getMembers();
-    }
+    public List<MemberEntity> getMembers() { return service.getMembers(); }
+
+    @GetMapping("/{id}")
+    public MemberEntity getMember(@PathVariable Integer id) { return service.getMemberById(id); }
 }

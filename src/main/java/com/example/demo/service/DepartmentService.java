@@ -18,4 +18,6 @@ public class DepartmentService {
     public List<DepartmentEntity> getDepartments() {
         return repository.findAll();
     }
+
+    public DepartmentEntity getDepartmentById(String id) { return repository.findById(id).orElse(null); }
 }

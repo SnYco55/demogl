@@ -16,4 +16,6 @@ public class ServiceService {
     }
 
     public List<ServiceEntity> getServices() { return repository.findAll(); }
+
+    public ServiceEntity getServiceById(String id) { return repository.findById(id).orElse(null); }
 }

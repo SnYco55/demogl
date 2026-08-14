@@ -2,10 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ServiceEntity;
 import com.example.demo.service.ServiceService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,4 +17,7 @@ public class ServiceController {
 
     @GetMapping
     public List<ServiceEntity> getServices() { return service.getServices(); }
+
+    @GetMapping("/{id}")
+    public ServiceEntity getService(@PathVariable String id) { return service.getServiceById(id); }
 }

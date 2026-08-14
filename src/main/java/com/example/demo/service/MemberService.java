@@ -18,4 +18,6 @@ public class MemberService {
     public List<MemberEntity> getMembers() {
         return repository.findAll();
     }
+
+    public MemberEntity getMemberById(Integer id) { return repository.findById(id).orElse(null); }
 }

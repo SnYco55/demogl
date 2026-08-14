@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @JsonPropertyOrder({
         "id",
@@ -23,7 +23,7 @@ public class MemberEntity {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    private Integer id;
 
     @Column(name = "firstname", nullable = false)
     private String firstname;
@@ -40,6 +40,9 @@ public class MemberEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "director")
+    private List<ServiceEntity> directedServices;
+
     @ManyToMany
     @JoinTable(
             name = "members_to_services",
@@ -48,42 +51,30 @@ public class MemberEntity {
     )
     private Set<ServiceEntity> services = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "members_to_roles",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles = new HashSet<>();
 
 
-    public UUID getId() {
-        return id;
-    }
 
-    public String getFirstname() {
-        return firstname;
-    }
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+    public Integer getId() { return id; }
 
-    public String getLastname() {
-        return lastname;
-    }
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+    public String getFirstname() { return firstname; }
+    public void setFirstname(String firstname) { this.firstname = firstname; }
 
-    public LocalDateTime getStart() {
-        return start;
-    }
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
+    public String getLastname() { return lastname; }
+    public void setLastname(String lastname) { this.lastname = lastname; }
 
-    public LocalDateTime getEnd() {
-        return end;
-    }
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
-    }
+    public LocalDateTime getStart() { return start; }
+    public void setStart(LocalDateTime start) { this.start = start; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public LocalDateTime getEnd() { return end; }
+    public void setEnd(LocalDateTime end) { this.end = end; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 
 }

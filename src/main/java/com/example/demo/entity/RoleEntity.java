@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @JsonPropertyOrder({
         "id",
@@ -14,12 +14,12 @@ import java.util.List;
 })
 
 @Entity
-@Table(name = "faculties")
-public class FacultyEntity {
+@Table(name = "roles")
+public class RoleEntity {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)
-    private String id;
+    private Integer id;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
@@ -27,12 +27,12 @@ public class FacultyEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "faculty")
-    private List<DepartmentEntity> departments = new ArrayList<>();
+    @ManyToMany(mappedBy = "roles")
+    private Set<MemberEntity> members = new HashSet<>();
 
 
 
-    public String getId() { return id; }
+    public Integer getId() { return id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

@@ -2,10 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.FacultyEntity;
 import com.example.demo.service.FacultyService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,4 +17,7 @@ public class FacultyController {
 
     @GetMapping
     public List<FacultyEntity> getFaculties() { return service.getFaculties(); }
+
+    @GetMapping("/{id}")
+    public FacultyEntity getFaculty(@PathVariable String id) { return service.getFacultyById(id); }
 }

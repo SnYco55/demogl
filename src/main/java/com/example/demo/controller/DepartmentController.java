@@ -2,10 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DepartmentEntity;
 import com.example.demo.service.DepartmentService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +16,9 @@ public class DepartmentController {
     public DepartmentController(DepartmentService service) { this.service = service; }
 
     @GetMapping
-    public List<DepartmentEntity> getDepartments() {
-        return service.getDepartments();
-    }
+    public List<DepartmentEntity> getDepartments() { return service.getDepartments(); }
+
+    @GetMapping("/{id}")
+    public DepartmentEntity getDepartmentById(@PathVariable String id) { return service.getDepartmentById(id); };
+
 }

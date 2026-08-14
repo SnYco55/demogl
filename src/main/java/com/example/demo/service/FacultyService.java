@@ -16,4 +16,6 @@ public class FacultyService {
     }
 
     public List<FacultyEntity> getFaculties() { return repository.findAll(); }
+
+    public FacultyEntity getFacultyById(String id) { return repository.findById(id).orElse(null); }
 }

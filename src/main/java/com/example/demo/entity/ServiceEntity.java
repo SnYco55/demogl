@@ -8,13 +8,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @JsonPropertyOrder({
         "id",
         "name",
         "departmentId",
-        "createdAt",
+        "directorId",
+        "createdAt"
 })
 
 @Entity
@@ -23,7 +23,7 @@ public class ServiceEntity {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    private String id;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
@@ -36,12 +36,17 @@ public class ServiceEntity {
     @JsonIgnore
     private DepartmentEntity department;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "director_id")
+    @JsonIgnore
+    private MemberEntity director;
+
     @ManyToMany(mappedBy = "services")
     private Set<MemberEntity> members =  new HashSet<>();
 
 
 
-    public UUID getId() { return id; }
+    public String getId() { return id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -51,6 +56,8 @@ public class ServiceEntity {
     public DepartmentEntity getDepartment() { return department; }
     public void setDepartment(DepartmentEntity department) { this.department = department; }
 
-    public UUID getDepartmentId() { return department.getId(); }
+    public String getDepartmentId() { return department.getId(); }
+
+    public Integer getDirectorId() { return director.getId(); }
 
 }
