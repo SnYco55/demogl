@@ -1,8 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.member.MemberDetailsResponse;
+import com.example.demo.dto.member.MemberListResponse;
 import com.example.demo.entity.MemberEntity;
+import com.example.demo.mapper.Mapper;
 import com.example.demo.repository.MemberRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -10,14 +15,33 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository repository;
+    private final Mapper mapper;
 
-    public MemberService(MemberRepository repository) {
+    public MemberService(MemberRepository repository,  Mapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public List<MemberEntity> getMembers() {
-        return repository.findAll();
+    public List<MemberListResponse> getMembers() {
+        return repository.findAll().stream()
+                .map(member -> new MemberListResponse(
+                        member.getId(),
+                        member.getFirstname(),
+                        member.getLastname(),
+                        member.getStart(),
+                        member.getEnd(),
+                        member.getCreatedAt()
+                ))
+                .toList();
     }
 
-    public MemberEntity getMemberById(Integer id) { return repository.findById(id).orElse(null); }
+    public MemberDetailsResponse getMemberById(Integer id) {
+        MemberEntity member = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Member not found"
+                ));
+
+        return mapper.toDetailsResponse(member);
+    }
 }
