@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.role.RoleResponse;
-import com.example.demo.entity.RoleEntity;
 import com.example.demo.service.RoleService;
 import org.springframework.web.bind.annotation.*;
 
