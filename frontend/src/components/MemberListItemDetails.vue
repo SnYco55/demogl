@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import router from "@/router/index.js";
 
 const route = useRoute()
 
@@ -45,6 +46,17 @@ onMounted(fetchMember)
 
 <template>
   <main class="min-h-screen px-4 py-10 mx-auto max-w-7xl">
+
+    <!-- Top bar -->
+    <div class="mb-6 flex justify-start">
+      <button
+          type="button"
+          @click="router.back()"
+          class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
+      >
+        Retour
+      </button>
+    </div>
 
     <!-- Loading -->
     <p
