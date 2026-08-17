@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ServiceEntity;
+import com.example.demo.dto.service.ServiceDetailsResponse;
+import com.example.demo.dto.service.ServiceListResponse;
 import com.example.demo.service.ServiceService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,8 @@ public class ServiceController {
     public ServiceController(ServiceService service) { this.service = service; }
 
     @GetMapping
-    public List<ServiceEntity> getServices() { return service.getServices(); }
+    public List<ServiceListResponse> getServices() { return service.getServices(); }
 
     @GetMapping("/{id}")
-    public ServiceEntity getService(@PathVariable String id) { return service.getServiceById(id); }
+    public ServiceDetailsResponse getService(@PathVariable String id) { return service.getServiceById(id); }
 }

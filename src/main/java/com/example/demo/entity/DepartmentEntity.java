@@ -1,18 +1,10 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-@JsonPropertyOrder({
-        "id",
-        "facultyId",
-        "createdAt"
-})
 
 @Entity
 @Table(name = "departments")
@@ -27,7 +19,6 @@ public class DepartmentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id", nullable = false)
-    @JsonIgnore
     private FacultyEntity faculty;
 
     @OneToMany(mappedBy = "department")
@@ -43,5 +34,7 @@ public class DepartmentEntity {
     public void setFaculty(FacultyEntity faculty) { this.faculty = faculty; }
 
     public String getFacultyId() { return faculty.getId(); }
+
+    public List<ServiceEntity> getServices() { return services; }
 
 }

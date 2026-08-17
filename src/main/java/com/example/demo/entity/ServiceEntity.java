@@ -1,21 +1,11 @@
 package com.example.demo.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
-@JsonPropertyOrder({
-        "id",
-        "name",
-        "departmentId",
-        "directorId",
-        "createdAt"
-})
 
 @Entity
 @Table(name = "services")
@@ -33,12 +23,10 @@ public class ServiceEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
-    @JsonIgnore
     private DepartmentEntity department;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "director_id")
-    @JsonIgnore
     private MemberEntity director;
 
     @ManyToMany(mappedBy = "services")
@@ -56,8 +44,15 @@ public class ServiceEntity {
     public DepartmentEntity getDepartment() { return department; }
     public void setDepartment(DepartmentEntity department) { this.department = department; }
 
+    public MemberEntity getDirector() { return director; }
+    public void setDirector(MemberEntity director) { this.director = director; }
+
     public String getDepartmentId() { return department.getId(); }
 
     public Integer getDirectorId() { return director.getId(); }
+
+    public Set<MemberEntity> getMembers() { return members; }
+
+
 
 }

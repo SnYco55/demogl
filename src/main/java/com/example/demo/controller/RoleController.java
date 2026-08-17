@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.role.RoleResponse;
 import com.example.demo.entity.RoleEntity;
 import com.example.demo.service.RoleService;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ public class RoleController {
     public RoleController(RoleService service) { this.service = service; }
 
     @GetMapping
-    public List<RoleEntity> getRoles() { return service.getRoles(); }
+    public List<RoleResponse> getRoles() { return service.getRoles(); }
 
     @GetMapping("/{id}")
-    public RoleEntity getRoleById(@PathVariable Integer id) { return service.getRoleById(id); }
+    public RoleResponse getRoleById(@PathVariable Integer id) { return service.getRoleById(id); }
 
 }

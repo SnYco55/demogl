@@ -1,17 +1,10 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
-@JsonPropertyOrder({
-        "id",
-        "name",
-        "createdAt"
-})
 
 @Entity
 @Table(name = "roles")
@@ -38,5 +31,7 @@ public class RoleEntity {
     public void setName(String name) { this.name = name; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public Set<MemberEntity> getMembers() { return members; }
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.FacultyEntity;
+import com.example.demo.dto.faculty.FacultyDetailsResponse;
+import com.example.demo.dto.faculty.FacultyListResponse;
 import com.example.demo.service.FacultyService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,8 @@ public class FacultyController {
     public FacultyController(FacultyService service) { this.service = service; }
 
     @GetMapping
-    public List<FacultyEntity> getFaculties() { return service.getFaculties(); }
+    public List<FacultyListResponse> getFaculties() { return service.getFaculties(); }
 
     @GetMapping("/{id}")
-    public FacultyEntity getFaculty(@PathVariable String id) { return service.getFacultyById(id); }
+    public FacultyDetailsResponse getFaculty(@PathVariable String id) { return service.getFacultyById(id); }
 }
