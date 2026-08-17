@@ -1,15 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-const props = defineProps({
-  member: {
-    type: Object,
-    required: true,
-  },
-})
+const route = useRoute()
 
-const faculties = ref({})
-const directors = ref({})
+const member = ref(null)
+const loading = ref(true)
+const error = ref(null)
 
 function formatDate(date) {
   if (!date) return '—'
@@ -21,120 +18,141 @@ function formatDate(date) {
   }).format(new Date(date))
 }
 
-async function fetchFaculty(departmentId) {
-  if (faculties.value[departmentId]) {
-    return
+async function fetchMember() {
+  try {
+    const response = await fetch(
+        `http://localhost:8080/members/${route.params.id}`,
+    )
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Membre introuvable')
+      }
+
+      throw new Error('Impossible de récupérer le membre')
+    }
+
+    member.value = await response.json()
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    loading.value = false
   }
-
-  const response = await fetch(`http://localhost:8080/departments/${departmentId}/faculty`)
-
-  faculties.value[departmentId] = await response.json()
 }
 
-async function fetchDirector(directorId) {
-  if (!directorId || directors.value[directorId]) {
-    return
-  }
-
-  const response = await fetch(`http://localhost:8080/members/${directorId}`)
-
-  if (!response.ok) {
-    throw new Error('Impossible de récupérer le directeur')
-  }
-
-  directors.value[directorId] = await response.json()
-}
-
-onMounted(async () => {
-  await Promise.all(
-    props.member.services.flatMap((service) => [
-      fetchFaculty(service.departmentId),
-      fetchDirector(service.directorId),
-    ]),
-  )
-})
+onMounted(fetchMember)
 </script>
 
 <template>
-  <div class="space-y-6">
-    <!-- Header -->
-    <header class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <p class="text-sm font-medium text-gray-500">Membre #{{ member.id }}</p>
+  <main class="min-h-screen px-4 py-10 mx-auto max-w-7xl">
 
-      <h1 class="mt-1 text-3xl font-bold text-gray-900">
-        {{ member.firstname }} {{ member.lastname }}
-      </h1>
+    <!-- Loading -->
+    <p
+        v-if="loading"
+        class="rounded-xl border border-gray-200 bg-white p-6 text-center text-gray-500"
+    >
+      Chargement...
+    </p>
 
-      <div class="mt-4 flex gap-6 text-sm text-gray-600">
-        <p>
-          <span class="font-medium text-gray-900">Début :</span>
-          {{ formatDate(member.start) }}
+    <!-- Error -->
+    <p
+        v-else-if="error"
+        class="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-600"
+    >
+      {{ error }}
+    </p>
+
+    <!-- Member -->
+    <div v-else-if="member" class="space-y-6">
+
+      <!-- Header -->
+      <header class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">
+          Membre #{{ member.id }}
         </p>
 
-        <p>
-          <span class="font-medium text-gray-900">Fin :</span>
-          {{ formatDate(member.end) }}
-        </p>
-      </div>
-    </header>
+        <h1 class="mt-1 text-3xl font-bold text-gray-900">
+          {{ member.firstname }} {{ member.lastname }}
+        </h1>
 
-    <!-- Roles -->
-    <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 class="text-lg font-semibold text-gray-900">Rôles</h2>
+        <div class="mt-4 flex gap-6 text-sm text-gray-600">
+          <p>
+            <span class="font-medium text-gray-900">Début :</span>
+            {{ formatDate(member.start) }}
+          </p>
 
-      <div class="mt-4 flex flex-wrap gap-2">
-        <span
-          v-for="role in member.roles"
-          :key="role.id"
-          class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700"
-        >
-          {{ role.name }}
-        </span>
-      </div>
-    </section>
+          <p>
+            <span class="font-medium text-gray-900">Fin :</span>
+            {{ formatDate(member.end) }}
+          </p>
+        </div>
+      </header>
 
-    <!-- Services -->
-    <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 class="text-lg font-semibold text-gray-900">Services</h2>
+      <!-- Roles -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900">
+          Rôles
+        </h2>
 
-      <div class="mt-4 space-y-3">
-        <div
-          v-for="service in member.services"
-          :key="service.id"
-          class="rounded-xl border border-gray-100 bg-gray-50 p-4"
-        >
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h3 class="font-semibold text-gray-900">
-                {{ service.name }}
-              </h3>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span
+              v-for="role in member.roles"
+              :key="role.id"
+              class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700"
+          >
+            {{ role.name }}
+          </span>
+        </div>
+      </section>
 
-              <p class="mt-1 text-sm text-gray-500">Département : {{ service.departmentId }}</p>
+      <!-- Services -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900">
+          Services
+        </h2>
 
-              <p class="text-sm text-gray-500">
-                Faculté :
-                {{ faculties[service.departmentId]?.name ?? 'Chargement...' }}
-              </p>
+        <div class="mt-4 space-y-3">
+          <div
+              v-for="service in member.services"
+              :key="service.id"
+              class="rounded-xl border border-gray-100 bg-gray-50 p-4"
+          >
+            <div class="flex items-start justify-between gap-4">
 
-              <p class="text-sm text-gray-500">
-                Directeur :
-                {{
-                  directors[service.directorId]
-                    ? `${directors[service.directorId].firstname} ${directors[service.directorId].lastname}`
-                    : 'Chargement...'
-                }}
-              </p>
+              <div>
+                <h3 class="font-semibold text-gray-900">
+                  {{ service.name }}
+                </h3>
+
+                <p class="mt-1 text-sm text-gray-500">
+                  Département :
+                  {{ service.department.id }}
+                </p>
+
+                <p class="text-sm text-gray-500">
+                  Faculté :
+                  {{ service.faculty.name }}
+                </p>
+
+                <p class="text-sm text-gray-500">
+                  Directeur :
+                  {{ service.director.firstname }}
+                  {{ service.director.lastname }}
+                </p>
+              </div>
+
+              <span
+                  v-if="service.director.id === member.id"
+                  class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700"
+              >
+                Directeur
+              </span>
+
             </div>
-
-            <span
-              v-if="member.directedServiceIds?.includes(service.id)"
-              class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700"
-            >
-              Directeur
-            </span>
           </div>
         </div>
-      </div>
-    </section>
-  </div>
+      </section>
+
+    </div>
+  </main>
 </template>
