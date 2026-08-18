@@ -1,15 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import router from "@/router/index.js";
+import { useRoute, useRouter } from 'vue-router'
+import type { MemberDetails } from '@/types/member'
 
 const route = useRoute()
+const router = useRouter()
 
-const member = ref(null)
+const member = ref<MemberDetails | null>(null)
 const loading = ref(true)
-const error = ref(null)
+const error = ref<string | null>(null)
 
-function formatDate(date) {
+function formatDate(date: string | null): string {
   if (!date) return '—'
 
   return new Intl.DateTimeFormat('fr-BE', {
@@ -19,7 +20,7 @@ function formatDate(date) {
   }).format(new Date(date))
 }
 
-async function fetchMember() {
+async function fetchMember(): Promise<void> {
   try {
     const response = await fetch(
         `http://localhost:8080/members/${route.params.id}`,
@@ -33,9 +34,13 @@ async function fetchMember() {
       throw new Error('Impossible de récupérer le membre')
     }
 
-    member.value = await response.json()
-  } catch (e) {
-    error.value = e.message
+    member.value = await response.json() as MemberDetails
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      error.value = e.message
+    } else {
+      error.value = 'Une erreur est survenue'
+    }
   } finally {
     loading.value = false
   }
@@ -45,7 +50,7 @@ onMounted(fetchMember)
 </script>
 
 <template>
-  <main class="min-h-screen px-4 py-10 mx-auto max-w-7xl">
+  <main class="mx-auto min-h-screen max-w-7xl px-4 py-10">
 
     <!-- Top bar -->
     <div class="mb-6 flex justify-start">

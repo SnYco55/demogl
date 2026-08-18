@@ -1,15 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import MemberListItem from './MemberListItem.vue'
+import type { Member } from '@/types/member'
 
-const members = ref([])
+const members = ref<Member[]>([])
 const loading = ref(true)
-const error = ref(null)
+const error = ref<string | null>(null)
 
 const selectedDate = ref('')
 const showDateFilter = ref(false)
 
-async function fetchMembers() {
+async function fetchMembers(): Promise<void> {
   try {
     const response = await fetch('http://localhost:8080/members')
 
@@ -18,14 +19,16 @@ async function fetchMembers() {
     }
 
     members.value = await response.json()
-  } catch (e) {
-    error.value = e.message
+  } catch (e: unknown) {
+    error.value = e instanceof Error
+        ? e.message
+        : 'Une erreur est survenue'
   } finally {
     loading.value = false
   }
 }
 
-function toDateOnly(date) {
+function toDateOnly(date: string | null): Date | null {
   if (!date) return null
 
   const value = new Date(date)
@@ -33,15 +36,22 @@ function toDateOnly(date) {
   return new Date(
       value.getFullYear(),
       value.getMonth(),
-      value.getDate()
+      value.getDate(),
   )
 }
 
-function isMemberActiveOnDate(member, date) {
+function isMemberActiveOnDate(
+    member: Member,
+    date: string,
+): boolean {
   if (!date) return true
 
   const selected = toDateOnly(`${date}T00:00:00`)
   const start = toDateOnly(member.start)
+
+  if (!selected || !start) {
+    return false
+  }
 
   if (selected < start) {
     return false
@@ -53,6 +63,10 @@ function isMemberActiveOnDate(member, date) {
 
   const end = toDateOnly(member.end)
 
+  if (!end) {
+    return true
+  }
+
   return selected <= end
 }
 
@@ -62,7 +76,7 @@ const filteredMembers = computed(() => {
   )
 })
 
-function formatSelectedDate(date) {
+function formatSelectedDate(date: string): string {
   if (!date) return ''
 
   return new Intl.DateTimeFormat('fr-BE', {
@@ -80,7 +94,7 @@ onMounted(fetchMembers)
     <section class="mx-auto w-full max-w-3xl space-y-4">
 
       <!-- Header -->
-      <header class="mb-8 flex items-start justify-between gap-4">
+      <header class="mb-4 flex items-end justify-between gap-4">
         <div>
           <h1 class="text-3xl font-bold text-gray-900">
             Membres
@@ -95,7 +109,7 @@ onMounted(fetchMembers)
         <button
             type="button"
             @click="showDateFilter = !showDateFilter"
-            class="rounded-xl border border-gray-200 bg-white px-4 py-3 text-xl shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
+            class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-lg shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
             title="Filtrer par date"
         >
           Filtrer

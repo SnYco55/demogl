@@ -6,13 +6,6 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import MemberList from '@/components/MemberList.vue'
-
-export default {
-  components: { MemberList },
-  setup() {
-    return {}
-  },
-}
 </script>

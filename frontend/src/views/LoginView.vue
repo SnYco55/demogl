@@ -4,10 +4,5 @@
   </div>
 </template>
 
-<script>
-export default {
-  setup() {
-    return {}
-  },
-}
+<script setup lang="ts">
 </script>

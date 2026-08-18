@@ -1,14 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import type { Member } from '@/types/member'
 
-defineProps({
-  member: {
-    type: Object,
-    required: true,
-  },
-})
+defineProps<{
+  member: Member
+}>()
 
-function formatDate(date) {
+function formatDate(date: string | null): string {
   if (!date) return '—'
 
   return new Intl.DateTimeFormat('fr-BE', {
