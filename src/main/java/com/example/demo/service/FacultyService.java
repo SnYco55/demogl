@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.faculty.FacultyCreateRequest;
-import com.example.demo.dto.faculty.FacultyDetailsResponse;
-import com.example.demo.dto.faculty.FacultyListResponse;
+import com.example.demo.dto.faculty.FacultyResponse;
 import com.example.demo.dto.faculty.FacultyPatchRequest;
 import com.example.demo.entity.FacultyEntity;
 import com.example.demo.repository.DepartmentRepository;
@@ -24,10 +23,10 @@ public class FacultyService {
         this.departmentRepository = departmentRepository;
     }
 
-    public List<FacultyListResponse> getFaculties() {
+    public List<FacultyResponse> getFaculties() {
         return repository.findAll()
                 .stream()
-                .map(faculty -> new FacultyListResponse(
+                .map(faculty -> new FacultyResponse(
                         faculty.getId(),
                         faculty.getName(),
                         faculty.getCreatedAt()
@@ -35,7 +34,7 @@ public class FacultyService {
                 .toList();
     }
 
-    public FacultyDetailsResponse getFacultyById(String id) {
+    public FacultyResponse getFacultyById(String id) {
         FacultyEntity faculty = repository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(
@@ -44,14 +43,14 @@ public class FacultyService {
                         )
                 );
 
-        return new FacultyDetailsResponse(
+        return new FacultyResponse(
                 faculty.getId(),
                 faculty.getName(),
                 faculty.getCreatedAt()
         );
     }
 
-    public FacultyDetailsResponse createFaculty(FacultyCreateRequest request) {
+    public FacultyResponse createFaculty(FacultyCreateRequest request) {
         String id = normalizeId(request.id());
         String name = normalizeName(request.name());
 
@@ -74,14 +73,14 @@ public class FacultyService {
         faculty.setName(name);
 
         repository.save(faculty);
-        return new FacultyDetailsResponse(
+        return new FacultyResponse(
                 faculty.getId(),
                 faculty.getName(),
                 faculty.getCreatedAt()
         );
     }
 
-    public FacultyDetailsResponse updateFaculty(String id, FacultyPatchRequest request) {
+    public FacultyResponse updateFaculty(String id, FacultyPatchRequest request) {
         FacultyEntity faculty = repository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(
@@ -105,7 +104,7 @@ public class FacultyService {
 
 
         repository.save(faculty);
-        return new FacultyDetailsResponse(
+        return new FacultyResponse(
                 faculty.getId(),
                 faculty.getName(),
                 faculty.getCreatedAt()

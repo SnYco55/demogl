@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.faculty.FacultyCreateRequest;
-import com.example.demo.dto.faculty.FacultyDetailsResponse;
-import com.example.demo.dto.faculty.FacultyListResponse;
+import com.example.demo.dto.faculty.FacultyResponse;
 import com.example.demo.dto.faculty.FacultyPatchRequest;
 import com.example.demo.service.FacultyService;
 import org.springframework.http.HttpStatus;
@@ -20,19 +19,19 @@ public class FacultyController {
     public FacultyController(FacultyService service) { this.service = service; }
 
     @GetMapping
-    public List<FacultyListResponse> getFaculties() { return service.getFaculties(); }
+    public List<FacultyResponse> getFaculties() { return service.getFaculties(); }
 
     @GetMapping("/{id}")
-    public FacultyDetailsResponse getFaculty(@PathVariable String id) { return service.getFacultyById(id); }
+    public FacultyResponse getFaculty(@PathVariable String id) { return service.getFacultyById(id); }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FacultyDetailsResponse createFaculty(@RequestBody FacultyCreateRequest request) {
+    public FacultyResponse createFaculty(@RequestBody FacultyCreateRequest request) {
         return service.createFaculty(request);
     }
 
     @PatchMapping("/{id}")
-    public FacultyDetailsResponse updateFaculty(@PathVariable String id, @RequestBody FacultyPatchRequest request) {
+    public FacultyResponse updateFaculty(@PathVariable String id, @RequestBody FacultyPatchRequest request) {
         return service.updateFaculty(id, request);
     }
 

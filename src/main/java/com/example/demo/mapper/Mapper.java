@@ -1,7 +1,7 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.department.DepartmentListResponse;
-import com.example.demo.dto.faculty.FacultyListResponse;
+import com.example.demo.dto.department.DepartmentResponse;
+import com.example.demo.dto.faculty.FacultyResponse;
 import com.example.demo.dto.member.MemberDetailsResponse;
 import com.example.demo.dto.member.MemberListResponse;
 import com.example.demo.dto.role.RoleResponse;
@@ -46,13 +46,13 @@ public class Mapper {
                 service.getId(),
                 service.getName(),
 
-                new DepartmentListResponse(
+                new DepartmentResponse(
                         service.getDepartment().getId(),
                         service.getDepartment().getFaculty().getId(),
                         service.getDepartment().getCreatedAt()
                 ),
 
-                new FacultyListResponse(
+                new FacultyResponse(
                         service.getDepartment().getFaculty().getId(),
                         service.getDepartment().getFaculty().getName(),
                         service.getDepartment().getFaculty().getCreatedAt()

@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.department.DepartmentDetailsResponse;
-import com.example.demo.dto.department.DepartmentListResponse;
-import com.example.demo.dto.faculty.FacultyDetailsResponse;
+import com.example.demo.dto.department.DepartmentCreateRequest;
+import com.example.demo.dto.department.DepartmentPatchRequest;
+import com.example.demo.dto.department.DepartmentResponse;
+import com.example.demo.dto.faculty.FacultyResponse;
 import com.example.demo.service.DepartmentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,12 +20,29 @@ public class DepartmentController {
     public DepartmentController(DepartmentService service) { this.service = service; }
 
     @GetMapping
-    public List<DepartmentListResponse> getDepartments() { return service.getDepartments(); }
+    public List<DepartmentResponse> getDepartments() { return service.getDepartments(); }
 
     @GetMapping("/{id}")
-    public DepartmentDetailsResponse getDepartmentById(@PathVariable String id) { return service.getDepartmentById(id); }
+    public DepartmentResponse getDepartmentById(@PathVariable String id) { return service.getDepartmentById(id); }
 
     @GetMapping("/{id}/faculty")
-    public FacultyDetailsResponse getFacultyByDepartmentId(@PathVariable String id) { return service.getFacultyByDepartmentId(id); }
+    public FacultyResponse getFacultyByDepartmentId(@PathVariable String id) { return service.getFacultyByDepartmentId(id); }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public DepartmentResponse createDepartment(@RequestBody DepartmentCreateRequest request) {
+        return service.createDepartment(request);
+    }
+
+    @PatchMapping("/{id}")
+    public DepartmentResponse updateDepartment(@PathVariable String id, @RequestBody DepartmentPatchRequest request) {
+        return service.updateDepartment(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDepartment(@PathVariable String id) {
+        service.deleteDepartment(id);
+    }
 
 }
