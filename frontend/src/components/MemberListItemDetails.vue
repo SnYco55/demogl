@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { MemberDetails } from '@/types/member'
+import type { MemberDetails } from '@/types/type.ts'
 
 const route = useRoute()
 const router = useRouter()
@@ -79,7 +79,7 @@ onMounted(fetchMember)
       {{ error }}
     </p>
 
-    <!-- Member -->
+    <!-- Type -->
     <div v-else-if="member" class="space-y-6">
 
       <!-- Header -->

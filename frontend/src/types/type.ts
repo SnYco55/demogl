@@ -19,10 +19,28 @@ export interface Department {
     createdAt: string
 }
 
+export interface DepartmentCreateRequest {
+    id: string
+    facultyId: string
+}
+
+export interface DepartmentPatchRequest {
+    facultyId: string
+}
+
 export interface Faculty {
     id: string
     name: string
     createdAt: string
+}
+
+export interface FacultyCreateRequest {
+    id: string
+    name: string
+}
+
+export interface FacultyPatchRequest {
+    name: string
 }
 
 export interface Service {

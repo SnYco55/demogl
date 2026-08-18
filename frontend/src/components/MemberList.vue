@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import MemberListItem from './MemberListItem.vue'
-import type { Member } from '@/types/member'
+import type { Member } from '@/types/type.ts'
 
 const members = ref<Member[]>([])
 const loading = ref(true)

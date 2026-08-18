@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import type { Member } from '@/types/member'
+import type { Member } from '@/types/type.ts'
 
 defineProps<{
   member: Member
