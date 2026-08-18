@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface ServiceRepository extends JpaRepository<ServiceEntity, String> {
 
 	long countByDepartment_Id(String departmentId);
+
+	long countByDirector_Id(Integer memberId);
 }

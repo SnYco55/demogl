@@ -22,10 +22,10 @@ public class MemberEntity {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "start", nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime start;
 
-    @Column(name = "end")
+    @Column(name = "end_date")
     private LocalDateTime end;
 
     @Column(name = "created_at",insertable = false, updatable = false)
