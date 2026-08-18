@@ -17,7 +17,7 @@ public class RoleEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at",insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToMany(mappedBy = "roles")

@@ -14,7 +14,7 @@ public class DepartmentEntity {
     @Column(name = "id", nullable = false, updatable = false)
     private String id;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at",insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

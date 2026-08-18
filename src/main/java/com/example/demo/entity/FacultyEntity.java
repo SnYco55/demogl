@@ -17,7 +17,7 @@ public class FacultyEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "faculty")
@@ -26,6 +26,7 @@ public class FacultyEntity {
 
 
     public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
