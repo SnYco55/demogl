@@ -11,7 +11,8 @@ import java.util.Set;
 public class RoleEntity {
 
     @Id
-    @Column(name = "id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = false, updatable = false)
     private Integer id;
 
     @Column(name = "name", nullable = false, unique = true)

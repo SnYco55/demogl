@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -8,23 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@JsonPropertyOrder({
-        "id",
-        "firstname",
-        "lastname",
-        "start",
-        "end",
-        "services",
-        "roles",
-        "createdAt",
-})
-
 @Entity
 @Table(name = "members")
 public class MemberEntity {
 
     @Id
-    @Column(name = "id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = false, updatable = false)
     private Integer id;
 
     @Column(name = "firstname", nullable = false)
