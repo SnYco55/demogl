@@ -8,13 +8,12 @@ import router from '@/router'
     <div class="mx-auto max-w-6xl px-6 py-10">
       <!-- Header -->
       <header class="mb-8">
-        <button
-          type="button"
-          @click="router.back()"
-          class="rounded-xl border border-gray-200 bg-white mb-4 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
+        <RouterLink
+          to="/"
+          class="rounded-xl inline-block border border-gray-200 bg-white mb-4 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
         >
           Retour
-        </button>
+        </RouterLink>
         <h1 class="text-3xl font-bold tracking-tight text-gray-900">Administration</h1>
 
         <p class="mt-2 text-sm text-gray-500">

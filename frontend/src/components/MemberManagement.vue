@@ -1,35 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
-import type { Type, Role, Service } from '@/types/type.ts'
+import type { Member, MemberDetails, Role, ServiceListItem } from '@/types/type'
 
-const members = ref<Type[]>([
-  {
-    id: 1,
-    firstname: 'Jean',
-    lastname: 'Dupont',
-    start: '2026-01-01T00:00:00',
-    end: null,
-    createdAt: '2026-01-01T00:00:00',
-  },
-  {
-    id: 2,
-    firstname: 'Marie',
-    lastname: 'Martin',
-    start: '2026-02-01T00:00:00',
-    end: null,
-    createdAt: '2026-02-01T00:00:00',
-  },
-])
-
-const services = ref<Service[]>([])
+const members = ref<Member[]>([])
+const services = ref<ServiceListItem[]>([])
 const roles = ref<Role[]>([])
 
 const showForm = ref(false)
-const editingMember = ref<Type | null>(null)
+const editingMember = ref<Member | null>(null)
 
 const showDeleteModal = ref(false)
-const memberToDelete = ref<Type | null>(null)
+const memberToDelete = ref<Member | null>(null)
 
 const firstname = ref('')
 const lastname = ref('')
@@ -38,6 +20,69 @@ const end = ref('')
 
 const selectedServices = ref<string[]>([])
 const selectedRoles = ref<number[]>([])
+
+const loading = ref(false)
+const loadingForm = ref(false)
+const saving = ref(false)
+const deleting = ref(false)
+const error = ref<string | null>(null)
+
+async function loadMembers() {
+  loading.value = true
+  error.value = null
+
+  try {
+    const response = await fetch('http://localhost:8080/members')
+
+    if (!response.ok) {
+      throw new Error('Impossible de récupérer les membres')
+    }
+
+    members.value = await response.json()
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Une erreur est survenue'
+  } finally {
+    loading.value = false
+  }
+}
+
+async function loadServices() {
+  try {
+    const response = await fetch('http://localhost:8080/services')
+
+    if (!response.ok) {
+      throw new Error('Impossible de récupérer les services')
+    }
+
+    services.value = await response.json()
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Une erreur est survenue'
+  }
+}
+
+async function loadRoles() {
+  try {
+    const response = await fetch('http://localhost:8080/roles')
+
+    if (!response.ok) {
+      throw new Error('Impossible de récupérer les rôles')
+    }
+
+    roles.value = await response.json()
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Une erreur est survenue'
+  }
+}
+
+function toDatetimeLocal(value: string | null): string {
+  if (!value) {
+    return ''
+  }
+
+  // L'input datetime-local attend "yyyy-MM-ddTHH:mm" (sans secondes),
+  // alors que l'API renvoie souvent "yyyy-MM-ddTHH:mm:ss".
+  return value.slice(0, 16)
+}
 
 function openCreateForm() {
   editingMember.value = null
@@ -50,21 +95,44 @@ function openCreateForm() {
   selectedServices.value = []
   selectedRoles.value = []
 
+  error.value = null
   showForm.value = true
 }
 
-function openEditForm(member: Type) {
+async function openEditForm(member: Member) {
   editingMember.value = member
 
   firstname.value = member.firstname
   lastname.value = member.lastname
-  start.value = member.start
-  end.value = member.end ?? ''
+  start.value = toDatetimeLocal(member.start)
+  end.value = toDatetimeLocal(member.end)
 
   selectedServices.value = []
   selectedRoles.value = []
 
+  error.value = null
   showForm.value = true
+
+  // La liste des membres ne contient pas les services/rôles,
+  // il faut aller chercher le détail du membre pour préremplir le formulaire.
+  loadingForm.value = true
+
+  try {
+    const response = await fetch(`http://localhost:8080/members/${member.id}`)
+
+    if (!response.ok) {
+      throw new Error('Impossible de récupérer le détail du membre')
+    }
+
+    const details: MemberDetails = await response.json()
+
+    selectedServices.value = details.services.map((service) => service.id)
+    selectedRoles.value = details.roles.map((role) => role.id)
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Une erreur est survenue'
+  } finally {
+    loadingForm.value = false
+  }
 }
 
 function closeForm() {
@@ -80,31 +148,73 @@ function closeForm() {
   selectedRoles.value = []
 }
 
-function saveMember() {
-  if (!firstname.value.trim() || !lastname.value.trim() || !start.value) {
+async function saveMember() {
+  const first = firstname.value.trim()
+  const last = lastname.value.trim()
+
+  if (!first || !last || !start.value) {
+    error.value = 'Le prénom, le nom et la date de début sont requis'
     return
   }
 
-  if (editingMember.value) {
-    editingMember.value.firstname = firstname.value.trim()
-    editingMember.value.lastname = lastname.value.trim()
-    editingMember.value.start = start.value
-    editingMember.value.end = end.value || null
-  } else {
-    members.value.push({
-      id: Date.now(),
-      firstname: firstname.value.trim(),
-      lastname: lastname.value.trim(),
+  saving.value = true
+  error.value = null
+
+  try {
+    let response: Response
+
+    const body = {
+      firstname: first,
+      lastname: last,
       start: start.value,
       end: end.value || null,
-      createdAt: new Date().toISOString(),
-    })
-  }
+      serviceIds: selectedServices.value,
+      roleIds: selectedRoles.value,
+    }
 
-  closeForm()
+    if (editingMember.value) {
+      response = await fetch(`http://localhost:8080/members/${editingMember.value.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+    } else {
+      response = await fetch('http://localhost:8080/members', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+    }
+
+    if (!response.ok) {
+      let message = 'Une erreur est survenue'
+
+      try {
+        const data = await response.json()
+
+        if (data.message) {
+          message = data.message
+        }
+      } catch {}
+
+      throw new Error(message)
+    }
+
+    await loadMembers()
+
+    closeForm()
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Une erreur est survenue'
+  } finally {
+    saving.value = false
+  }
 }
 
-function openDeleteModal(member: Type) {
+function openDeleteModal(member: Member) {
   memberToDelete.value = member
   showDeleteModal.value = true
 }
@@ -114,14 +224,41 @@ function closeDeleteModal() {
   memberToDelete.value = null
 }
 
-function deleteMember() {
+async function deleteMember() {
   if (!memberToDelete.value) {
     return
   }
 
-  members.value = members.value.filter((member) => member.id !== memberToDelete.value!.id)
+  deleting.value = true
+  error.value = null
 
-  closeDeleteModal()
+  try {
+    const response = await fetch(`http://localhost:8080/members/${memberToDelete.value.id}`, {
+      method: 'DELETE',
+    })
+
+    if (!response.ok) {
+      let message = 'Impossible de supprimer le membre'
+
+      try {
+        const data = await response.json()
+
+        if (data.message) {
+          message = data.message
+        }
+      } catch {}
+
+      throw new Error(message)
+    }
+
+    closeDeleteModal()
+
+    await loadMembers()
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Une erreur est survenue'
+  } finally {
+    deleting.value = false
+  }
 }
 
 function formatDate(date: string | null) {
@@ -135,6 +272,12 @@ function formatDate(date: string | null) {
     year: 'numeric',
   }).format(new Date(date))
 }
+
+onMounted(() => {
+  loadMembers()
+  loadServices()
+  loadRoles()
+})
 </script>
 
 <template>
@@ -157,6 +300,14 @@ function formatDate(date: string | null) {
       </button>
     </header>
 
+    <!-- Error -->
+    <div
+      v-if="error"
+      class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+    >
+      {{ error }}
+    </div>
+
     <!-- Add / Edit form -->
     <section v-if="showForm" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div class="mb-5">
@@ -173,7 +324,11 @@ function formatDate(date: string | null) {
         </p>
       </div>
 
-      <div class="space-y-4">
+      <div v-if="loadingForm" class="py-6 text-center text-sm text-gray-500">
+        Chargement des informations du membre...
+      </div>
+
+      <div v-else class="space-y-4">
         <!-- Firstname / Lastname -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
@@ -185,8 +340,9 @@ function formatDate(date: string | null) {
               id="member-firstname"
               v-model="firstname"
               type="text"
+              :disabled="saving"
               placeholder="Prénom"
-              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
             />
           </div>
 
@@ -199,8 +355,9 @@ function formatDate(date: string | null) {
               id="member-lastname"
               v-model="lastname"
               type="text"
+              :disabled="saving"
               placeholder="Nom"
-              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
             />
           </div>
         </div>
@@ -216,7 +373,8 @@ function formatDate(date: string | null) {
               id="member-start"
               v-model="start"
               type="datetime-local"
-              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              :disabled="saving"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
             />
           </div>
 
@@ -229,53 +387,76 @@ function formatDate(date: string | null) {
               id="member-end"
               v-model="end"
               type="datetime-local"
-              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              :disabled="saving"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
             />
           </div>
         </div>
 
         <!-- Services -->
         <div>
-          <label for="member-services" class="mb-2 block text-sm font-medium text-gray-700">
-            Services
-          </label>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Services </label>
 
-          <select
-            id="member-services"
-            v-model="selectedServices"
-            multiple
-            class="min-h-32 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+          <div
+            v-if="services.length === 0"
+            class="rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-400"
           >
-            <option v-for="service in services" :key="service.id" :value="service.id">
-              {{ service.name }}
-            </option>
-          </select>
+            Aucun service disponible.
+          </div>
 
-          <p class="mt-1 text-xs text-gray-400">
-            Maintenez Ctrl (ou Cmd) pour sélectionner plusieurs services.
-          </p>
+          <div
+            v-else
+            class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto rounded-xl border border-gray-100 p-2 sm:grid-cols-2"
+          >
+            <label
+              v-for="service in services"
+              :key="service.id"
+              class="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-3 text-sm transition hover:bg-gray-50 has-[:checked]:border-gray-400 has-[:checked]:bg-gray-50"
+            >
+              <input
+                type="checkbox"
+                :value="service.id"
+                v-model="selectedServices"
+                :disabled="saving"
+                class="h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-2 focus:ring-gray-100 disabled:cursor-not-allowed"
+              />
+
+              <span class="truncate text-gray-700">{{ service.name }}</span>
+            </label>
+          </div>
         </div>
 
         <!-- Roles -->
         <div>
-          <label for="member-roles" class="mb-2 block text-sm font-medium text-gray-700">
-            Rôles
-          </label>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Rôles </label>
 
-          <select
-            id="member-roles"
-            v-model="selectedRoles"
-            multiple
-            class="min-h-32 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+          <div
+            v-if="roles.length === 0"
+            class="rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-400"
           >
-            <option v-for="role in roles" :key="role.id" :value="role.id">
-              {{ role.name }}
-            </option>
-          </select>
+            Aucun rôle disponible.
+          </div>
 
-          <p class="mt-1 text-xs text-gray-400">
-            Maintenez Ctrl (ou Cmd) pour sélectionner plusieurs rôles.
-          </p>
+          <div
+            v-else
+            class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto rounded-xl border border-gray-100 p-2 sm:grid-cols-2"
+          >
+            <label
+              v-for="role in roles"
+              :key="role.id"
+              class="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-3 text-sm transition hover:bg-gray-50 has-[:checked]:border-gray-400 has-[:checked]:bg-gray-50"
+            >
+              <input
+                type="checkbox"
+                :value="role.id"
+                v-model="selectedRoles"
+                :disabled="saving"
+                class="h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-2 focus:ring-gray-100 disabled:cursor-not-allowed"
+              />
+
+              <span class="truncate text-gray-700">{{ role.name }}</span>
+            </label>
+          </div>
         </div>
 
         <!-- Form actions -->
@@ -283,7 +464,8 @@ function formatDate(date: string | null) {
           <button
             type="button"
             @click="closeForm"
-            class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            :disabled="saving"
+            class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Annuler
           </button>
@@ -291,16 +473,25 @@ function formatDate(date: string | null) {
           <button
             type="button"
             @click="saveMember"
-            class="rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800"
+            :disabled="saving"
+            class="rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {{ editingMember ? 'Enregistrer' : 'Ajouter' }}
+            {{ saving ? 'Enregistrement...' : editingMember ? 'Enregistrer' : 'Ajouter' }}
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Type list -->
-    <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <!-- Loading -->
+    <section
+      v-if="loading"
+      class="rounded-2xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-500 shadow-sm"
+    >
+      Chargement des membres...
+    </section>
+
+    <!-- Member list -->
+    <section v-else class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div v-if="members.length === 0" class="p-8 text-center text-sm text-gray-500">
         Aucun membre.
       </div>
@@ -311,7 +502,7 @@ function formatDate(date: string | null) {
           :key="member.id"
           class="flex items-center justify-between gap-6 px-6 py-5 transition hover:bg-gray-50"
         >
-          <!-- Type information -->
+          <!-- Member information -->
           <div class="min-w-0">
             <h3 class="font-semibold text-gray-900">
               {{ member.firstname }} {{ member.lastname }}
@@ -339,7 +530,8 @@ function formatDate(date: string | null) {
             <button
               type="button"
               @click="openDeleteModal(member)"
-              class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+              :disabled="deleting"
+              class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Supprimer
             </button>

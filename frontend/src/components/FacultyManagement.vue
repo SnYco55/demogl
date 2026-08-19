@@ -299,9 +299,7 @@ onMounted(() => {
               {{ faculty.name }}
             </h3>
 
-            <p class="mt-1 text-sm text-gray-400">
-              {{ faculty.id }}
-            </p>
+            <p class="mt-1 text-sm text-gray-400">ID : {{ faculty.id }}</p>
           </div>
 
           <div class="flex shrink-0 items-center gap-2">

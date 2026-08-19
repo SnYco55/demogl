@@ -7,6 +7,11 @@ export interface Member {
   createdAt: string
 }
 
+export interface MemberDetails extends Member {
+  services: Service[]
+  roles: Role[]
+}
+
 export interface Role {
   id: number
   name: string
@@ -52,7 +57,23 @@ export interface Service {
   createdAt: string
 }
 
-export interface MemberDetails extends Member {
-  services: Service[]
-  roles: Role[]
+export interface ServiceListItem {
+  id: string
+  name: string
+  departmentId: string
+  directorId: number
+  createdAt: string
+}
+
+export interface ServiceCreateRequest {
+  id: string
+  name: string
+  departmentId: string
+  directorId: number
+}
+
+export interface ServicePatchRequest {
+  name?: string
+  departmentId?: string
+  directorId?: number
 }
