@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import router from "@/router";
+import router from '@/router'
 </script>
 
 <template>
@@ -9,9 +9,9 @@ import router from "@/router";
       <!-- Header -->
       <header class="mb-8">
         <button
-            type="button"
-            @click="router.back()"
-            class="rounded-xl border border-gray-200 bg-white mb-4 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
+          type="button"
+          @click="router.back()"
+          class="rounded-xl border border-gray-200 bg-white mb-4 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
         >
           Retour
         </button>
