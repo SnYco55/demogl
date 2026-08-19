@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
 import type { ServiceListItem, ServiceCreateRequest, ServicePatchRequest } from '@/types/type'
+import { API_URL } from "@/config/api.ts";
 
 const services = ref<ServiceListItem[]>([])
 
@@ -24,7 +25,7 @@ async function loadServices() {
   error.value = null
 
   try {
-    const response = await fetch('http://localhost:8080/services')
+    const response = await fetch(`${API_URL}/services`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer les services')
@@ -106,7 +107,7 @@ async function saveService() {
         directorId: Number(director),
       }
 
-      response = await fetch(`http://localhost:8080/services/${editingService.value.id}`, {
+      response = await fetch(`${API_URL}/services/${editingService.value.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ async function saveService() {
         directorId: Number(director),
       }
 
-      response = await fetch('http://localhost:8080/services', {
+      response = await fetch(`${API_URL}/services`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -167,7 +168,7 @@ async function confirmDeleteService() {
   error.value = null
 
   try {
-    const response = await fetch(`http://localhost:8080/services/${serviceToDelete.value.id}`, {
+    const response = await fetch(`${API_URL}/services/${serviceToDelete.value.id}`, {
       method: 'DELETE',
     })
 

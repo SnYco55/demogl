@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { MemberDetails } from '@/types/type.ts'
+import {API_URL} from "@/config/api.ts";
 
 const route = useRoute()
 const router = useRouter()
@@ -22,7 +23,7 @@ function formatDate(date: string | null): string {
 
 async function fetchMember(): Promise<void> {
   try {
-    const response = await fetch(`http://localhost:8080/members/${route.params.id}`)
+    const response = await fetch(`${API_URL}/members/${route.params.id}`)
 
     if (!response.ok) {
       if (response.status === 404) {

@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import MemberListItem from './MemberListItem.vue'
 import type { Member } from '@/types/type.ts'
+import { API_URL } from "@/config/api.ts";
 
 const members = ref<Member[]>([])
 const loading = ref(true)
@@ -12,7 +13,7 @@ const showDateFilter = ref(false)
 
 async function fetchMembers(): Promise<void> {
   try {
-    const response = await fetch('http://localhost:8080/members')
+    const response = await fetch(`${API_URL}/members`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer les membres')

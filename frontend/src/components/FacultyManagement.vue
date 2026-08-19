@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
 import type { Faculty, FacultyCreateRequest, FacultyPatchRequest } from '@/types/type.ts'
+import { API_URL } from "@/config/api.ts";
 
 const faculties = ref<Faculty[]>([])
 
@@ -22,7 +23,7 @@ async function loadFaculties() {
   error.value = null
 
   try {
-    const response = await fetch('http://localhost:8080/faculties')
+    const response = await fetch(`${API_URL}/faculties`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer les facultés')
@@ -84,7 +85,7 @@ async function saveFaculty() {
         name,
       }
 
-      response = await fetch(`http://localhost:8080/faculties/${editingFaculty.value.id}`, {
+      response = await fetch(`${API_URL}/faculties/${editingFaculty.value.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ async function saveFaculty() {
         name,
       }
 
-      response = await fetch('http://localhost:8080/faculties', {
+      response = await fetch(`${API_URL}/faculties`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +144,7 @@ async function confirmDeleteFaculty() {
   error.value = null
 
   try {
-    const response = await fetch(`http://localhost:8080/faculties/${facultyToDelete.value.id}`, {
+    const response = await fetch(`${API_URL}/faculties/${facultyToDelete.value.id}`, {
       method: 'DELETE',
     })
 

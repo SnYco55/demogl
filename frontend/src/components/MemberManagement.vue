@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
 import type { Member, MemberDetails, Role, ServiceListItem } from '@/types/type'
+import { API_URL } from "@/config/api.ts";
 
 const members = ref<Member[]>([])
 const services = ref<ServiceListItem[]>([])
@@ -32,7 +33,7 @@ async function loadMembers() {
   error.value = null
 
   try {
-    const response = await fetch('http://localhost:8080/members')
+    const response = await fetch(`${API_URL}/members`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer les membres')
@@ -48,7 +49,7 @@ async function loadMembers() {
 
 async function loadServices() {
   try {
-    const response = await fetch('http://localhost:8080/services')
+    const response = await fetch(`${API_URL}/services`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer les services')
@@ -62,7 +63,7 @@ async function loadServices() {
 
 async function loadRoles() {
   try {
-    const response = await fetch('http://localhost:8080/roles')
+    const response = await fetch(`${API_URL}/roles`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer les rôles')
@@ -118,7 +119,7 @@ async function openEditForm(member: Member) {
   loadingForm.value = true
 
   try {
-    const response = await fetch(`http://localhost:8080/members/${member.id}`)
+    const response = await fetch(`${API_URL}/members/${member.id}`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer le détail du membre')
@@ -173,7 +174,7 @@ async function saveMember() {
     }
 
     if (editingMember.value) {
-      response = await fetch(`http://localhost:8080/members/${editingMember.value.id}`, {
+      response = await fetch(`${API_URL}/members/${editingMember.value.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -181,7 +182,7 @@ async function saveMember() {
         body: JSON.stringify(body),
       })
     } else {
-      response = await fetch('http://localhost:8080/members', {
+      response = await fetch(`${API_URL}/members`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -233,7 +234,7 @@ async function deleteMember() {
   error.value = null
 
   try {
-    const response = await fetch(`http://localhost:8080/members/${memberToDelete.value.id}`, {
+    const response = await fetch(`${API_URL}/members/${memberToDelete.value.id}`, {
       method: 'DELETE',
     })
 

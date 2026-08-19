@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
 import type { Department, DepartmentCreateRequest, DepartmentPatchRequest } from '@/types/type'
+import { API_URL } from "@/config/api.ts";
 
 const departments = ref<Department[]>([])
 
@@ -22,7 +23,7 @@ async function loadDepartments() {
   error.value = null
 
   try {
-    const response = await fetch('http://localhost:8080/departments')
+    const response = await fetch(`${API_URL}/departments`)
 
     if (!response.ok) {
       throw new Error('Impossible de récupérer les départements')
@@ -84,7 +85,7 @@ async function saveDepartment() {
         facultyId: faculty,
       }
 
-      response = await fetch(`http://localhost:8080/departments/${editingDepartment.value.id}`, {
+      response = await fetch(`${API_URL}/departments/${editingDepartment.value.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ async function saveDepartment() {
         facultyId: faculty,
       }
 
-      response = await fetch('http://localhost:8080/departments', {
+      response = await fetch(`${API_URL}/departments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +145,7 @@ async function confirmDeleteDepartment() {
 
   try {
     const response = await fetch(
-      `http://localhost:8080/departments/${departmentToDelete.value.id}`,
+        `${API_URL}/departments/${departmentToDelete.value.id}`,
       {
         method: 'DELETE',
       },
