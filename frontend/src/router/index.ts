@@ -3,10 +3,10 @@ import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AdminView from '@/views/AdminView.vue'
 import MemberDetailsView from '@/views/MemberDetailsView.vue'
-import FacultyManagement from "@/components/FacultyManagement.vue";
-import DepartmentManagement from "@/components/DepartmentManagement.vue";
-import ServiceManagement from "@/components/ServiceManagement.vue";
-import MemberManagement from "@/components/MemberManagement.vue";
+import FacultyManagement from '@/components/FacultyManagement.vue'
+import DepartmentManagement from '@/components/DepartmentManagement.vue'
+import ServiceManagement from '@/components/ServiceManagement.vue'
+import MemberManagement from '@/components/MemberManagement.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,22 +14,22 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
       path: '/admin',
       name: 'admin',
-      component: AdminView
+      component: AdminView,
     },
     {
       path: '/members/:id',
       name: 'member-details',
-      component: MemberDetailsView
+      component: MemberDetailsView,
     },
     {
       path: '/admin',
@@ -52,13 +52,12 @@ const router = createRouter({
           component: ServiceManagement,
         },
         {
-          path : 'members',
+          path: 'members',
           component: MemberManagement,
-        }
-
+        },
       ],
     },
-  ]
+  ],
 })
 
 export default router

@@ -81,11 +81,7 @@ function closeForm() {
 }
 
 function saveMember() {
-  if (
-      !firstname.value.trim() ||
-      !lastname.value.trim() ||
-      !start.value
-  ) {
+  if (!firstname.value.trim() || !lastname.value.trim() || !start.value) {
     return
   }
 
@@ -123,9 +119,7 @@ function deleteMember() {
     return
   }
 
-  members.value = members.value.filter(
-      (member) => member.id !== memberToDelete.value!.id,
-  )
+  members.value = members.value.filter((member) => member.id !== memberToDelete.value!.id)
 
   closeDeleteModal()
 }
@@ -145,23 +139,18 @@ function formatDate(date: string | null) {
 
 <template>
   <section class="space-y-6">
-
     <!-- Header -->
     <header class="flex items-center justify-between">
       <div>
-        <h2 class="text-2xl font-bold text-gray-900">
-          Membres
-        </h2>
+        <h2 class="text-2xl font-bold text-gray-900">Membres</h2>
 
-        <p class="mt-1 text-sm text-gray-500">
-          Gérez les membres de l'université.
-        </p>
+        <p class="mt-1 text-sm text-gray-500">Gérez les membres de l'université.</p>
       </div>
 
       <button
-          type="button"
-          @click="openCreateForm"
-          class="flex items-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
+        type="button"
+        @click="openCreateForm"
+        class="flex items-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
       >
         <span class="text-lg leading-none">+</span>
         Ajouter
@@ -169,10 +158,7 @@ function formatDate(date: string | null) {
     </header>
 
     <!-- Add / Edit form -->
-    <section
-        v-if="showForm"
-        class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
-    >
+    <section v-if="showForm" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div class="mb-5">
         <h3 class="text-lg font-semibold text-gray-900">
           {{ editingMember ? 'Modifier le membre' : 'Ajouter un membre' }}
@@ -181,110 +167,86 @@ function formatDate(date: string | null) {
         <p class="mt-1 text-sm text-gray-500">
           {{
             editingMember
-                ? 'Modifiez les informations du membre.'
-                : 'Entrez les informations du nouveau membre.'
+              ? 'Modifiez les informations du membre.'
+              : 'Entrez les informations du nouveau membre.'
           }}
         </p>
       </div>
 
       <div class="space-y-4">
-
         <!-- Firstname / Lastname -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
           <div>
-            <label
-                for="member-firstname"
-                class="mb-2 block text-sm font-medium text-gray-700"
-            >
+            <label for="member-firstname" class="mb-2 block text-sm font-medium text-gray-700">
               Prénom
             </label>
 
             <input
-                id="member-firstname"
-                v-model="firstname"
-                type="text"
-                placeholder="Prénom"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              id="member-firstname"
+              v-model="firstname"
+              type="text"
+              placeholder="Prénom"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
             />
           </div>
 
           <div>
-            <label
-                for="member-lastname"
-                class="mb-2 block text-sm font-medium text-gray-700"
-            >
+            <label for="member-lastname" class="mb-2 block text-sm font-medium text-gray-700">
               Nom
             </label>
 
             <input
-                id="member-lastname"
-                v-model="lastname"
-                type="text"
-                placeholder="Nom"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              id="member-lastname"
+              v-model="lastname"
+              type="text"
+              placeholder="Nom"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
             />
           </div>
-
         </div>
 
         <!-- Dates -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
           <div>
-            <label
-                for="member-start"
-                class="mb-2 block text-sm font-medium text-gray-700"
-            >
+            <label for="member-start" class="mb-2 block text-sm font-medium text-gray-700">
               Début
             </label>
 
             <input
-                id="member-start"
-                v-model="start"
-                type="datetime-local"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              id="member-start"
+              v-model="start"
+              type="datetime-local"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
             />
           </div>
 
           <div>
-            <label
-                for="member-end"
-                class="mb-2 block text-sm font-medium text-gray-700"
-            >
+            <label for="member-end" class="mb-2 block text-sm font-medium text-gray-700">
               Fin
             </label>
 
             <input
-                id="member-end"
-                v-model="end"
-                type="datetime-local"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+              id="member-end"
+              v-model="end"
+              type="datetime-local"
+              class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
             />
           </div>
-
         </div>
 
         <!-- Services -->
         <div>
-          <label
-              for="member-services"
-              class="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label for="member-services" class="mb-2 block text-sm font-medium text-gray-700">
             Services
           </label>
 
           <select
-              id="member-services"
-              v-model="selectedServices"
-              multiple
-              class="min-h-32 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+            id="member-services"
+            v-model="selectedServices"
+            multiple
+            class="min-h-32 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
           >
-            <option
-                v-for="service in services"
-                :key="service.id"
-                :value="service.id"
-            >
+            <option v-for="service in services" :key="service.id" :value="service.id">
               {{ service.name }}
             </option>
           </select>
@@ -296,24 +258,17 @@ function formatDate(date: string | null) {
 
         <!-- Roles -->
         <div>
-          <label
-              for="member-roles"
-              class="mb-2 block text-sm font-medium text-gray-700"
-          >
+          <label for="member-roles" class="mb-2 block text-sm font-medium text-gray-700">
             Rôles
           </label>
 
           <select
-              id="member-roles"
-              v-model="selectedRoles"
-              multiple
-              class="min-h-32 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
+            id="member-roles"
+            v-model="selectedRoles"
+            multiple
+            class="min-h-32 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
           >
-            <option
-                v-for="role in roles"
-                :key="role.id"
-                :value="role.id"
-            >
+            <option v-for="role in roles" :key="role.id" :value="role.id">
               {{ role.name }}
             </option>
           </select>
@@ -326,46 +281,36 @@ function formatDate(date: string | null) {
         <!-- Form actions -->
         <div class="flex justify-end gap-3 pt-2">
           <button
-              type="button"
-              @click="closeForm"
-              class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            type="button"
+            @click="closeForm"
+            class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
           >
             Annuler
           </button>
 
           <button
-              type="button"
-              @click="saveMember"
-              class="rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800"
+            type="button"
+            @click="saveMember"
+            class="rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800"
           >
             {{ editingMember ? 'Enregistrer' : 'Ajouter' }}
           </button>
         </div>
-
       </div>
     </section>
 
     <!-- Type list -->
-    <section
-        class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
-    >
-      <div
-          v-if="members.length === 0"
-          class="p-8 text-center text-sm text-gray-500"
-      >
+    <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div v-if="members.length === 0" class="p-8 text-center text-sm text-gray-500">
         Aucun membre.
       </div>
 
-      <div
-          v-else
-          class="divide-y divide-gray-100"
-      >
+      <div v-else class="divide-y divide-gray-100">
         <div
-            v-for="member in members"
-            :key="member.id"
-            class="flex items-center justify-between gap-6 px-6 py-5 transition hover:bg-gray-50"
+          v-for="member in members"
+          :key="member.id"
+          class="flex items-center justify-between gap-6 px-6 py-5 transition hover:bg-gray-50"
         >
-
           <!-- Type information -->
           <div class="min-w-0">
             <h3 class="font-semibold text-gray-900">
@@ -373,39 +318,31 @@ function formatDate(date: string | null) {
             </h3>
 
             <div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-400">
-              <span>
-                #{{ member.id }}
-              </span>
+              <span> #{{ member.id }} </span>
 
-              <span>
-                Début : {{ formatDate(member.start) }}
-              </span>
+              <span> Début : {{ formatDate(member.start) }} </span>
 
-              <span>
-                Fin : {{ formatDate(member.end) }}
-              </span>
+              <span> Fin : {{ formatDate(member.end) }} </span>
             </div>
           </div>
 
           <!-- Actions -->
           <div class="flex shrink-0 items-center gap-2">
-
             <button
-                type="button"
-                @click="openEditForm(member)"
-                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+              type="button"
+              @click="openEditForm(member)"
+              class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
             >
               Modifier
             </button>
 
             <button
-                type="button"
-                @click="openDeleteModal(member)"
-                class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+              type="button"
+              @click="openDeleteModal(member)"
+              class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
             >
               Supprimer
             </button>
-
           </div>
         </div>
       </div>
@@ -413,16 +350,15 @@ function formatDate(date: string | null) {
 
     <!-- Delete confirmation -->
     <ConfirmDeleteModal
-        :visible="showDeleteModal"
-        title="Supprimer le membre"
-        :message="
-      memberToDelete
-        ? `Êtes-vous sûr de vouloir supprimer ${memberToDelete.firstname} ${memberToDelete.lastname} ?`
-        : ''
-    "
-        @cancel="closeDeleteModal"
-        @confirm="deleteMember"
+      :visible="showDeleteModal"
+      title="Supprimer le membre"
+      :message="
+        memberToDelete
+          ? `Êtes-vous sûr de vouloir supprimer ${memberToDelete.firstname} ${memberToDelete.lastname} ?`
+          : ''
+      "
+      @cancel="closeDeleteModal"
+      @confirm="deleteMember"
     />
-
   </section>
 </template>
