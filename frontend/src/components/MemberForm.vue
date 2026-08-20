@@ -47,7 +47,7 @@ function submit() {
   const first = firstname.value.trim()
   const last = lastname.value.trim()
 
-  if (!first || !last || !start.value) {
+  if (!first || !last) {
     error.value = 'Le prénom, le nom et la date de début sont requis'
     return
   }
