@@ -4,13 +4,10 @@ import com.example.demo.dto.department.DepartmentResponse;
 import com.example.demo.dto.faculty.FacultyResponse;
 import com.example.demo.dto.member.MemberListResponse;
 
-import java.time.LocalDateTime;
-
 public record ServiceDetailsResponse(
         String id,
         String name,
         DepartmentResponse department,
         FacultyResponse faculty,
-        MemberListResponse director,
-        LocalDateTime createdAt
+        MemberListResponse director
 ) {}

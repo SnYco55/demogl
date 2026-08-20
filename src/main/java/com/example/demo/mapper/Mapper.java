@@ -31,12 +31,10 @@ public class Mapper {
                         .stream()
                         .map(role -> new RoleResponse(
                                 role.getId(),
-                                role.getName(),
-                                role.getCreatedAt()
+                                role.getName()
                         ))
-                        .toList(),
+                        .toList()
 
-                member.getCreatedAt()
         );
     }
 
@@ -48,14 +46,12 @@ public class Mapper {
 
                 new DepartmentResponse(
                         service.getDepartment().getId(),
-                        service.getDepartment().getFaculty().getId(),
-                        service.getDepartment().getCreatedAt()
+                        service.getDepartment().getFaculty().getId()
                 ),
 
                 new FacultyResponse(
                         service.getDepartment().getFaculty().getId(),
-                        service.getDepartment().getFaculty().getName(),
-                        service.getDepartment().getFaculty().getCreatedAt()
+                        service.getDepartment().getFaculty().getName()
                 ),
 
                 new MemberListResponse(
@@ -63,11 +59,9 @@ public class Mapper {
                         service.getDirector().getFirstname(),
                         service.getDirector().getLastname(),
                         service.getDirector().getStart(),
-                        service.getDirector().getEnd(),
-                        service.getDirector().getCreatedAt()
-                ),
+                        service.getDirector().getEnd()
+                )
 
-                service.getCreatedAt()
         );
     }
 }

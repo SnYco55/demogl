@@ -43,8 +43,7 @@ public class MemberService {
                         member.getFirstname(),
                         member.getLastname(),
                         member.getStart(),
-                        member.getEnd(),
-                        member.getCreatedAt()
+                        member.getEnd()
                 ))
                 .toList();
     }
@@ -166,7 +165,16 @@ public class MemberService {
             return new HashSet<>();
         }
 
-        return new HashSet<>(serviceRepository.findAllById(serviceIds));
+        List<ServiceEntity> services = serviceRepository.findAllById(serviceIds);
+
+        if (services.size() != serviceIds.size()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "One or more service IDs do not exist"
+            );
+        }
+
+        return new HashSet<>(services);
     }
 
     private Set<RoleEntity> resolveRoles(List<Integer> roleIds) {
@@ -174,6 +182,15 @@ public class MemberService {
             return new HashSet<>();
         }
 
-        return new HashSet<>(roleRepository.findAllById(roleIds));
+        List<RoleEntity> roles = roleRepository.findAllById(roleIds);
+
+        if (roles.size() != roleIds.size()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "One or more role IDs do not exist"
+            );
+        }
+
+        return new HashSet<>(roles);
     }
 }

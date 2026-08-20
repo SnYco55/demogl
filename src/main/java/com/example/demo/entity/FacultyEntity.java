@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +16,6 @@ public class FacultyEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     @OneToMany(mappedBy = "faculty")
     private List<DepartmentEntity> departments = new ArrayList<>();
 
@@ -30,8 +26,6 @@ public class FacultyEntity {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
 
     public List<DepartmentEntity> getDepartment() {  return departments; }
 

@@ -28,8 +28,7 @@ public class FacultyService {
                 .stream()
                 .map(faculty -> new FacultyResponse(
                         faculty.getId(),
-                        faculty.getName(),
-                        faculty.getCreatedAt()
+                        faculty.getName()
                 ))
                 .toList();
     }
@@ -45,8 +44,7 @@ public class FacultyService {
 
         return new FacultyResponse(
                 faculty.getId(),
-                faculty.getName(),
-                faculty.getCreatedAt()
+                faculty.getName()
         );
     }
 
@@ -75,8 +73,7 @@ public class FacultyService {
         repository.save(faculty);
         return new FacultyResponse(
                 faculty.getId(),
-                faculty.getName(),
-                faculty.getCreatedAt()
+                faculty.getName()
         );
     }
 
@@ -106,8 +103,7 @@ public class FacultyService {
         repository.save(faculty);
         return new FacultyResponse(
                 faculty.getId(),
-                faculty.getName(),
-                faculty.getCreatedAt()
+                faculty.getName()
         );
     }
 

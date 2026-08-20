@@ -1,10 +1,43 @@
-CREATE TABLE departments (id varchar(255) DEFAULT ''::text NOT NULL, faculty_id varchar(255) DEFAULT ''::text NOT NULL, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT departments_pkey PRIMARY KEY (id));
-CREATE TABLE faculties (id varchar(255) DEFAULT ''::text NOT NULL, name varchar(255) DEFAULT ''::text NOT NULL UNIQUE, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT faculties_pkey PRIMARY KEY (id));
-CREATE TABLE members (id SERIAL NOT NULL, firstname varchar(255) DEFAULT ''::text NOT NULL, lastname varchar(255) DEFAULT ''::text NOT NULL, start_date timestamp DEFAULT now() NOT NULL, end_date timestamp, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT members_pkey PRIMARY KEY (id));
-CREATE TABLE members_to_roles (member_id int4 NOT NULL, role_id int4 NOT NULL, CONSTRAINT members_to_roles_pkey PRIMARY KEY (member_id, role_id));
-CREATE TABLE members_to_services (member_id int4 NOT NULL, service_id varchar(255) DEFAULT ''::text NOT NULL, CONSTRAINT members_to_services_pkey PRIMARY KEY (member_id, service_id));
-CREATE TABLE roles (id SERIAL NOT NULL, name varchar(255) DEFAULT ''::text NOT NULL UNIQUE, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT roles_pkey PRIMARY KEY (id));
-CREATE TABLE services (id varchar(255) DEFAULT ''::text NOT NULL, name varchar(255) DEFAULT ''::text NOT NULL UNIQUE, department_id varchar(255) NOT NULL, created_at timestamp DEFAULT now() NOT NULL, director_id int4 NOT NULL, CONSTRAINT services_pkey PRIMARY KEY (id));
+CREATE TABLE departments (
+    id varchar(255) DEFAULT ''::text NOT NULL,
+    faculty_id varchar(255) DEFAULT ''::text NOT NULL,
+    CONSTRAINT departments_pkey PRIMARY KEY (id)
+);
+CREATE TABLE faculties (
+    id varchar(255) DEFAULT ''::text NOT NULL,
+    name varchar(255) DEFAULT ''::text NOT NULL UNIQUE,
+    CONSTRAINT faculties_pkey PRIMARY KEY (id)
+);
+CREATE TABLE members (
+    id SERIAL NOT NULL,
+    firstname varchar(255) DEFAULT ''::text NOT NULL,
+    lastname varchar(255) DEFAULT ''::text NOT NULL,
+    start_date timestamp DEFAULT now() NOT NULL,
+    end_date timestamp,
+    CONSTRAINT members_pkey PRIMARY KEY (id)
+);
+CREATE TABLE members_to_roles (
+    member_id int4 NOT NULL,
+    role_id int4 NOT NULL,
+    CONSTRAINT members_to_roles_pkey PRIMARY KEY (member_id, role_id)
+);
+CREATE TABLE members_to_services (
+    member_id int4 NOT NULL,
+    service_id varchar(255) DEFAULT ''::text NOT NULL,
+    CONSTRAINT members_to_services_pkey PRIMARY KEY (member_id, service_id)
+);
+CREATE TABLE roles (
+    id SERIAL NOT NULL,
+    name varchar(255) DEFAULT ''::text NOT NULL UNIQUE,
+    CONSTRAINT roles_pkey PRIMARY KEY (id)
+);
+CREATE TABLE services (
+    id varchar(255) DEFAULT ''::text NOT NULL,
+    name varchar(255) DEFAULT ''::text NOT NULL UNIQUE,
+    department_id varchar(255) NOT NULL,
+    director_id int4 NOT NULL,
+    CONSTRAINT services_pkey PRIMARY KEY (id)
+);
 ALTER TABLE members_to_services ADD CONSTRAINT FKmembers_to807670 FOREIGN KEY (member_id) REFERENCES members (id);
 ALTER TABLE members_to_services ADD CONSTRAINT FKmembers_to120315 FOREIGN KEY (service_id) REFERENCES services (id);
 ALTER TABLE services ADD CONSTRAINT FKservices465428 FOREIGN KEY (department_id) REFERENCES departments (id);

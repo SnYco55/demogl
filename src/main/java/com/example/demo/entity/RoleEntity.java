@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,14 +11,11 @@ public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @Column(name = "created_at",insertable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     @ManyToMany(mappedBy = "roles")
     private Set<MemberEntity> members = new HashSet<>();
@@ -30,8 +26,6 @@ public class RoleEntity {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
 
     public Set<MemberEntity> getMembers() { return members; }
 

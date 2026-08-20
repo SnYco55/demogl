@@ -13,6 +13,5 @@ public record MemberDetailsResponse(
         LocalDateTime start,
         LocalDateTime end,
         List<ServiceDetailsResponse> services,
-        List<RoleResponse> roles,
-        LocalDateTime createdAt
+        List<RoleResponse> roles
 ) {}

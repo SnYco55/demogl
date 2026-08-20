@@ -43,8 +43,7 @@ public class ServiceService {
                         service.getId(),
                         service.getName(),
                         service.getDepartment().getId(),
-                        service.getDirector().getId(),
-                        service.getCreatedAt()
+                        service.getDirector().getId()
                 ))
                 .toList();
     }
@@ -135,8 +134,7 @@ public class ServiceService {
 
         return new DepartmentResponse(
                 department.getId(),
-                department.getFaculty().getId(),
-                department.getCreatedAt()
+                department.getFaculty().getId()
         );
     }
 
@@ -147,8 +145,7 @@ public class ServiceService {
 
         return new FacultyResponse(
                 faculty.getId(),
-                faculty.getName(),
-                faculty.getCreatedAt()
+                faculty.getName()
         );
     }
 
@@ -162,8 +159,7 @@ public class ServiceService {
                 director.getFirstname(),
                 director.getLastname(),
                 director.getStart(),
-                director.getEnd(),
-                director.getCreatedAt()
+                director.getEnd()
         );
     }
 
@@ -242,14 +238,12 @@ public class ServiceService {
 
                 new DepartmentResponse(
                         department.getId(),
-                        faculty.getId(),
-                        department.getCreatedAt()
+                        faculty.getId()
                 ),
 
                 new FacultyResponse(
                         faculty.getId(),
-                        faculty.getName(),
-                        faculty.getCreatedAt()
+                        faculty.getName()
                 ),
 
                 new MemberListResponse(
@@ -257,11 +251,8 @@ public class ServiceService {
                         director.getFirstname(),
                         director.getLastname(),
                         director.getStart(),
-                        director.getEnd(),
-                        director.getCreatedAt()
-                ),
-
-                service.getCreatedAt()
+                        director.getEnd()
+                )
         );
     }
 }

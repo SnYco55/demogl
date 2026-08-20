@@ -28,8 +28,7 @@ public class RoleService {
                 .stream()
                 .map(role -> new RoleResponse(
                         role.getId(),
-                        role.getName(),
-                        role.getCreatedAt()
+                        role.getName()
                 ))
                 .toList();
     }
@@ -45,8 +44,7 @@ public class RoleService {
 
         return new RoleResponse(
                 role.getId(),
-                role.getName(),
-                role.getCreatedAt()
+                role.getName()
         );
     }
 
@@ -66,8 +64,7 @@ public class RoleService {
         repository.save(role);
         return new RoleResponse(
                 role.getId(),
-                role.getName(),
-                role.getCreatedAt()
+                role.getName()
         );
     }
 
@@ -91,8 +88,7 @@ public class RoleService {
 
         return new RoleResponse(
                 role.getId(),
-                role.getName(),
-                role.getCreatedAt()
+                role.getName()
         );
     }
 

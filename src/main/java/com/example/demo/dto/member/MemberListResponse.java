@@ -7,6 +7,5 @@ public record MemberListResponse(
         String firstname,
         String lastname,
         LocalDateTime start,
-        LocalDateTime end,
-        LocalDateTime createdAt
+        LocalDateTime end
 ) {}

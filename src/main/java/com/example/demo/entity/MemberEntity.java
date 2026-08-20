@@ -13,7 +13,7 @@ public class MemberEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @Column(name = "firstname", nullable = false)
@@ -22,14 +22,12 @@ public class MemberEntity {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE"
+    )
     private LocalDateTime start;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private LocalDateTime end;
-
-    @Column(name = "created_at",insertable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "director")
     private List<ServiceEntity> directedServices;
@@ -65,8 +63,6 @@ public class MemberEntity {
 
     public LocalDateTime getEnd() { return end; }
     public void setEnd(LocalDateTime end) { this.end = end; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
 
     public Set<ServiceEntity> getServices() { return services; }
 

@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,9 +15,6 @@ public class ServiceEntity {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @Column(name = "created_at",insertable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
@@ -38,8 +34,6 @@ public class ServiceEntity {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
 
     public DepartmentEntity getDepartment() { return department; }
     public void setDepartment(DepartmentEntity department) { this.department = department; }

@@ -34,8 +34,7 @@ public class DepartmentService {
                 .stream()
                 .map(department -> new DepartmentResponse(
                         department.getId(),
-                        department.getFaculty().getId(),
-                        department.getCreatedAt()
+                        department.getFaculty().getId()
                 ))
                 .toList();
     }
@@ -51,8 +50,7 @@ public class DepartmentService {
 
         return new DepartmentResponse(
                 department.getId(),
-                department.getFaculty().getId(),
-                department.getCreatedAt()
+                department.getFaculty().getId()
         );
     }
 
@@ -80,8 +78,7 @@ public class DepartmentService {
         repository.save(department);
         return new DepartmentResponse(
                 department.getId(),
-                department.getFaculty().getId(),
-                department.getCreatedAt()
+                department.getFaculty().getId()
         );
     }
 
@@ -104,8 +101,7 @@ public class DepartmentService {
 
         return new DepartmentResponse(
                 department.getId(),
-                department.getFaculty().getId(),
-                department.getCreatedAt()
+                department.getFaculty().getId()
         );
     }
 
@@ -138,8 +134,7 @@ public class DepartmentService {
 
         return new FacultyResponse(
                 department.getFaculty().getId(),
-                department.getFaculty().getName(),
-                department.getFaculty().getCreatedAt()
+                department.getFaculty().getName()
         );
     }
 
