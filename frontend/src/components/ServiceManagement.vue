@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
 import type { ServiceListItem, ServiceCreateRequest, ServicePatchRequest } from '@/types/type'
-import { API_URL } from "@/config/api.ts";
+import { API_URL } from '@/config/api.ts'
 
 const services = ref<ServiceListItem[]>([])
 
@@ -255,7 +255,7 @@ onMounted(() => {
             v-model="serviceId"
             type="text"
             :disabled="!!editingService || saving"
-            placeholder="Ex. info"
+            placeholder="Ex. S852"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
           />
         </div>
@@ -271,7 +271,7 @@ onMounted(() => {
             v-model="serviceName"
             type="text"
             :disabled="saving"
-            placeholder="Ex. Service Informatique"
+            placeholder="Ex. Service de Génie Logiciel"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
           />
         </div>
@@ -287,7 +287,7 @@ onMounted(() => {
             v-model="departmentId"
             type="text"
             :disabled="saving"
-            placeholder="Ex. med"
+            placeholder="Ex. informatique"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
           />
         </div>

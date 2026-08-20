@@ -86,7 +86,6 @@ async function openEditForm(member: Member) {
   error.value = null
   showForm.value = true
 
-
   loadingForm.value = true
 
   try {
@@ -247,9 +246,9 @@ onMounted(() => {
       </div>
 
       <button
-          type="button"
-          @click="openCreateForm"
-          class="flex items-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
+        type="button"
+        @click="openCreateForm"
+        class="flex items-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
       >
         <span class="text-lg leading-none">+</span>
         Ajouter
@@ -257,8 +256,8 @@ onMounted(() => {
     </header>
 
     <div
-        v-if="error"
-        class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+      v-if="error"
+      class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
     >
       {{ error }}
     </div>
@@ -273,8 +272,8 @@ onMounted(() => {
         <p class="mt-1 text-sm text-gray-500">
           {{
             editingMember
-                ? 'Modifiez les informations du membre.'
-                : 'Entrez les informations du nouveau membre.'
+              ? 'Modifiez les informations du membre.'
+              : 'Entrez les informations du nouveau membre.'
           }}
         </p>
       </div>
@@ -283,25 +282,24 @@ onMounted(() => {
         Chargement des informations du membre...
       </div>
 
-
       <MemberForm
-          v-else
-          :key="editingMember?.id ?? 'new'"
-          :editing-member="editingMember"
-          :services="services"
-          :roles="roles"
-          :initial-service-ids="initialServiceIds"
-          :initial-role-ids="initialRoleIds"
-          :saving="saving"
-          @save="saveMember"
-          @cancel="closeForm"
+        v-else
+        :key="editingMember?.id ?? 'new'"
+        :editing-member="editingMember"
+        :services="services"
+        :roles="roles"
+        :initial-service-ids="initialServiceIds"
+        :initial-role-ids="initialRoleIds"
+        :saving="saving"
+        @save="saveMember"
+        @cancel="closeForm"
       />
     </section>
 
     <!-- Loading -->
     <section
-        v-if="loading"
-        class="rounded-2xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-500 shadow-sm"
+      v-if="loading"
+      class="rounded-2xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-500 shadow-sm"
     >
       Chargement des membres...
     </section>
@@ -314,9 +312,9 @@ onMounted(() => {
 
       <div v-else class="divide-y divide-gray-100">
         <div
-            v-for="member in members"
-            :key="member.id"
-            class="flex items-center justify-between gap-6 px-6 py-5 transition hover:bg-gray-50"
+          v-for="member in members"
+          :key="member.id"
+          class="flex items-center justify-between gap-6 px-6 py-5 transition hover:bg-gray-50"
         >
           <!-- Member information -->
           <div class="min-w-0">
@@ -336,18 +334,18 @@ onMounted(() => {
           <!-- Actions -->
           <div class="flex shrink-0 items-center gap-2">
             <button
-                type="button"
-                @click="openEditForm(member)"
-                class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+              type="button"
+              @click="openEditForm(member)"
+              class="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
             >
               Modifier
             </button>
 
             <button
-                type="button"
-                @click="openDeleteModal(member)"
-                :disabled="deleting"
-                class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+              type="button"
+              @click="openDeleteModal(member)"
+              :disabled="deleting"
+              class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Supprimer
             </button>
@@ -358,15 +356,15 @@ onMounted(() => {
 
     <!-- Delete confirmation -->
     <ConfirmDeleteModal
-        :visible="showDeleteModal"
-        title="Supprimer le membre"
-        :message="
+      :visible="showDeleteModal"
+      title="Supprimer le membre"
+      :message="
         memberToDelete
           ? `Êtes-vous sûr de vouloir supprimer ${memberToDelete.firstname} ${memberToDelete.lastname} ?`
           : ''
       "
-        @cancel="closeDeleteModal"
-        @confirm="deleteMember"
+      @cancel="closeDeleteModal"
+      @confirm="deleteMember"
     />
   </section>
 </template>

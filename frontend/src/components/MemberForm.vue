@@ -48,7 +48,7 @@ function submit() {
   const last = lastname.value.trim()
 
   if (!first || !last) {
-    error.value = 'Le prénom, le nom et la date de début sont requis'
+    error.value = 'Le prénom et le nom sont requis'
     return
   }
 
@@ -68,8 +68,8 @@ function submit() {
 <template>
   <div class="space-y-4">
     <div
-        v-if="error"
-        class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+      v-if="error"
+      class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
     >
       {{ error }}
     </div>
@@ -82,12 +82,12 @@ function submit() {
         </label>
 
         <input
-            id="member-firstname"
-            v-model="firstname"
-            type="text"
-            :disabled="saving"
-            placeholder="Prénom"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
+          id="member-firstname"
+          v-model="firstname"
+          type="text"
+          :disabled="saving"
+          placeholder="Prénom"
+          class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
         />
       </div>
 
@@ -97,12 +97,12 @@ function submit() {
         </label>
 
         <input
-            id="member-lastname"
-            v-model="lastname"
-            type="text"
-            :disabled="saving"
-            placeholder="Nom"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
+          id="member-lastname"
+          v-model="lastname"
+          type="text"
+          :disabled="saving"
+          placeholder="Nom"
+          class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
         />
       </div>
     </div>
@@ -115,25 +115,23 @@ function submit() {
         </label>
 
         <input
-            id="member-start"
-            v-model="start"
-            type="datetime-local"
-            :disabled="saving"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
+          id="member-start"
+          v-model="start"
+          type="datetime-local"
+          :disabled="saving"
+          class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
         />
       </div>
 
       <div>
-        <label for="member-end" class="mb-2 block text-sm font-medium text-gray-700">
-          Fin
-        </label>
+        <label for="member-end" class="mb-2 block text-sm font-medium text-gray-700"> Fin </label>
 
         <input
-            id="member-end"
-            v-model="end"
-            type="datetime-local"
-            :disabled="saving"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
+          id="member-end"
+          v-model="end"
+          type="datetime-local"
+          :disabled="saving"
+          class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
         />
       </div>
     </div>
@@ -143,27 +141,27 @@ function submit() {
       <label class="mb-2 block text-sm font-medium text-gray-700"> Services </label>
 
       <div
-          v-if="services.length === 0"
-          class="rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-400"
+        v-if="services.length === 0"
+        class="rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-400"
       >
         Aucun service disponible.
       </div>
 
       <div
-          v-else
-          class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto rounded-xl border border-gray-100 p-2 sm:grid-cols-2"
+        v-else
+        class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto rounded-xl border border-gray-100 p-2 sm:grid-cols-2"
       >
         <label
-            v-for="service in services"
-            :key="service.id"
-            class="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-3 text-sm transition hover:bg-gray-50 has-[:checked]:border-gray-400 has-[:checked]:bg-gray-50"
+          v-for="service in services"
+          :key="service.id"
+          class="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-3 text-sm transition hover:bg-gray-50 has-[:checked]:border-gray-400 has-[:checked]:bg-gray-50"
         >
           <input
-              type="checkbox"
-              :value="service.id"
-              v-model="selectedServices"
-              :disabled="saving"
-              class="h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-2 focus:ring-gray-100 disabled:cursor-not-allowed"
+            type="checkbox"
+            :value="service.id"
+            v-model="selectedServices"
+            :disabled="saving"
+            class="h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-2 focus:ring-gray-100 disabled:cursor-not-allowed"
           />
 
           <span class="truncate text-gray-700">{{ service.name }}</span>
@@ -176,27 +174,27 @@ function submit() {
       <label class="mb-2 block text-sm font-medium text-gray-700"> Rôles </label>
 
       <div
-          v-if="roles.length === 0"
-          class="rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-400"
+        v-if="roles.length === 0"
+        class="rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-400"
       >
         Aucun rôle disponible.
       </div>
 
       <div
-          v-else
-          class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto rounded-xl border border-gray-100 p-2 sm:grid-cols-2"
+        v-else
+        class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto rounded-xl border border-gray-100 p-2 sm:grid-cols-2"
       >
         <label
-            v-for="role in roles"
-            :key="role.id"
-            class="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-3 text-sm transition hover:bg-gray-50 has-[:checked]:border-gray-400 has-[:checked]:bg-gray-50"
+          v-for="role in roles"
+          :key="role.id"
+          class="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-3 text-sm transition hover:bg-gray-50 has-[:checked]:border-gray-400 has-[:checked]:bg-gray-50"
         >
           <input
-              type="checkbox"
-              :value="role.id"
-              v-model="selectedRoles"
-              :disabled="saving"
-              class="h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-2 focus:ring-gray-100 disabled:cursor-not-allowed"
+            type="checkbox"
+            :value="role.id"
+            v-model="selectedRoles"
+            :disabled="saving"
+            class="h-4 w-4 shrink-0 rounded border-gray-300 text-black focus:ring-2 focus:ring-gray-100 disabled:cursor-not-allowed"
           />
 
           <span class="truncate text-gray-700">{{ role.name }}</span>
@@ -207,19 +205,19 @@ function submit() {
     <!-- Form actions -->
     <div class="flex justify-end gap-3 pt-2">
       <button
-          type="button"
-          @click="emit('cancel')"
-          :disabled="saving"
-          class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+        type="button"
+        @click="emit('cancel')"
+        :disabled="saving"
+        class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Annuler
       </button>
 
       <button
-          type="button"
-          @click="submit"
-          :disabled="saving"
-          class="rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+        type="button"
+        @click="submit"
+        :disabled="saving"
+        class="rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {{ saving ? 'Enregistrement...' : editingMember ? 'Enregistrer' : 'Ajouter' }}
       </button>

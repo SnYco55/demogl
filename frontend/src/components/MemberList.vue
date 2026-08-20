@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import MemberListItem from './MemberListItem.vue'
 import type { Member } from '@/types/type.ts'
-import { API_URL } from "@/config/api.ts";
+import { API_URL } from '@/config/api.ts'
 
 const members = ref<Member[]>([])
 const loading = ref(true)

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { MemberDetails } from '@/types/type.ts'
-import {API_URL} from "@/config/api.ts";
+import { API_URL } from '@/config/api.ts'
 
 const route = useRoute()
 const router = useRouter()

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
 import type { Faculty, FacultyCreateRequest, FacultyPatchRequest } from '@/types/type.ts'
-import { API_URL } from "@/config/api.ts";
+import { API_URL } from '@/config/api.ts'
 
 const faculties = ref<Faculty[]>([])
 
@@ -231,7 +231,7 @@ onMounted(() => {
             v-model="facultyId"
             type="text"
             :disabled="!!editingFaculty || saving"
-            placeholder="Ex. fmpb"
+            placeholder="Ex. fs"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
           />
         </div>
@@ -246,7 +246,7 @@ onMounted(() => {
             id="faculty-name"
             v-model="facultyName"
             type="text"
-            placeholder="Ex. Faculté de Médecine"
+            placeholder="Ex. Faculté des Sciences"
             :disabled="saving"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100"
             @keyup.enter="saveFaculty"

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'
 import type { Department, DepartmentCreateRequest, DepartmentPatchRequest } from '@/types/type'
-import { API_URL } from "@/config/api.ts";
+import { API_URL } from '@/config/api.ts'
 
 const departments = ref<Department[]>([])
 
@@ -144,12 +144,9 @@ async function confirmDeleteDepartment() {
   error.value = null
 
   try {
-    const response = await fetch(
-        `${API_URL}/departments/${departmentToDelete.value.id}`,
-      {
-        method: 'DELETE',
-      },
-    )
+    const response = await fetch(`${API_URL}/departments/${departmentToDelete.value.id}`, {
+      method: 'DELETE',
+    })
 
     if (!response.ok) {
       let message = 'Impossible de supprimer le département'
@@ -236,7 +233,7 @@ onMounted(() => {
             v-model="departmentId"
             type="text"
             :disabled="!!editingDepartment || saving"
-            placeholder="Ex. med"
+            placeholder="Ex. informatique"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
           />
         </div>
@@ -252,7 +249,7 @@ onMounted(() => {
             v-model="facultyId"
             type="text"
             :disabled="saving"
-            placeholder="Ex. fmpb"
+            placeholder="Ex. fs"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-100 disabled:bg-gray-100 disabled:text-gray-500"
             @keyup.enter="saveDepartment"
           />
