@@ -1,55 +1,14 @@
--- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
-
-CREATE TABLE public.faculties (
-  id character varying NOT NULL DEFAULT ''::text,
-  name character varying NOT NULL DEFAULT ''::text UNIQUE,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT faculties_pkey PRIMARY KEY (id)
-);
-CREATE TABLE public.departments (
-  id character varying NOT NULL DEFAULT ''::text,
-  faculty_id character varying NOT NULL DEFAULT ''::text,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT departments_pkey PRIMARY KEY (id),
-  CONSTRAINT departments_falculty_id_fkey FOREIGN KEY (faculty_id) REFERENCES public.faculties(id)
-);
-CREATE TABLE public.services (
-  id character varying NOT NULL DEFAULT ''::text,
-  name character varying NOT NULL DEFAULT ''::text UNIQUE,
-  department_id character varying NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  director_id integer,
-  CONSTRAINT services_pkey PRIMARY KEY (id),
-  CONSTRAINT services_director_id_fkey FOREIGN KEY (director_id) REFERENCES public.members(id),
-  CONSTRAINT services_department_id_fkey FOREIGN KEY (department_id) REFERENCES public.departments(id)
-);
-CREATE TABLE public.members (
-  id integer GENERATED ALWAYS AS IDENTITY NOT NULL,
-  firstname character varying NOT NULL DEFAULT ''::text,
-  lastname character varying NOT NULL DEFAULT ''::text,
-  start_date timestamp without time zone NOT NULL DEFAULT now(),
-  end_date timestamp without time zone,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT members_pkey PRIMARY KEY (id)
-);
-CREATE TABLE public.members_to_services (
-  member_id integer NOT NULL,
-  service_id character varying NOT NULL DEFAULT ''::text,
-  CONSTRAINT members_to_services_pkey PRIMARY KEY (member_id, service_id),
-  CONSTRAINT members_to_services_member_id_fkey FOREIGN KEY (member_id) REFERENCES public.members(id),
-  CONSTRAINT members_to_services_service_id_fkey FOREIGN KEY (service_id) REFERENCES public.services(id)
-);
-CREATE TABLE public.roles (
-  id integer GENERATED ALWAYS AS IDENTITY NOT NULL,
-  name character varying NOT NULL DEFAULT ''::text UNIQUE,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT roles_pkey PRIMARY KEY (id)
-);
-CREATE TABLE public.members_to_roles (
-  member_id integer NOT NULL,
-  role_id integer NOT NULL,
-  CONSTRAINT members_to_roles_pkey PRIMARY KEY (member_id, role_id),
-  CONSTRAINT members_to_roles_member_id_fkey FOREIGN KEY (member_id) REFERENCES public.members(id),
-  CONSTRAINT members_to_roles_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.roles(id)
-);
+CREATE TABLE departments (id varchar(255) DEFAULT ''::text NOT NULL, faculty_id varchar(255) DEFAULT ''::text NOT NULL, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT departments_pkey PRIMARY KEY (id));
+CREATE TABLE faculties (id varchar(255) DEFAULT ''::text NOT NULL, name varchar(255) DEFAULT ''::text NOT NULL UNIQUE, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT faculties_pkey PRIMARY KEY (id));
+CREATE TABLE members (id SERIAL NOT NULL, firstname varchar(255) DEFAULT ''::text NOT NULL, lastname varchar(255) DEFAULT ''::text NOT NULL, start_date timestamp DEFAULT now() NOT NULL, end_date timestamp, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT members_pkey PRIMARY KEY (id));
+CREATE TABLE members_to_roles (member_id int4 NOT NULL, role_id int4 NOT NULL, CONSTRAINT members_to_roles_pkey PRIMARY KEY (member_id, role_id));
+CREATE TABLE members_to_services (member_id int4 NOT NULL, service_id varchar(255) DEFAULT ''::text NOT NULL, CONSTRAINT members_to_services_pkey PRIMARY KEY (member_id, service_id));
+CREATE TABLE roles (id SERIAL NOT NULL, name varchar(255) DEFAULT ''::text NOT NULL UNIQUE, created_at timestamp DEFAULT now() NOT NULL, CONSTRAINT roles_pkey PRIMARY KEY (id));
+CREATE TABLE services (id varchar(255) DEFAULT ''::text NOT NULL, name varchar(255) DEFAULT ''::text NOT NULL UNIQUE, department_id varchar(255) NOT NULL, created_at timestamp DEFAULT now() NOT NULL, director_id int4 NOT NULL, CONSTRAINT services_pkey PRIMARY KEY (id));
+ALTER TABLE members_to_services ADD CONSTRAINT FKmembers_to807670 FOREIGN KEY (member_id) REFERENCES members (id);
+ALTER TABLE members_to_services ADD CONSTRAINT FKmembers_to120315 FOREIGN KEY (service_id) REFERENCES services (id);
+ALTER TABLE services ADD CONSTRAINT FKservices465428 FOREIGN KEY (department_id) REFERENCES departments (id);
+ALTER TABLE services ADD CONSTRAINT FKservices877245 FOREIGN KEY (director_id) REFERENCES members (id);
+ALTER TABLE departments ADD CONSTRAINT FKdepartment612153 FOREIGN KEY (faculty_id) REFERENCES faculties (id);
+ALTER TABLE members_to_roles ADD CONSTRAINT FKmembers_to750705 FOREIGN KEY (member_id) REFERENCES members (id);
+ALTER TABLE members_to_roles ADD CONSTRAINT FKmembers_to227028 FOREIGN KEY (role_id) REFERENCES roles (id);

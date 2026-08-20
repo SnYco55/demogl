@@ -25,7 +25,7 @@ public class ServiceEntity {
     private DepartmentEntity department;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "director_id")
+    @JoinColumn(name = "director_id",  nullable = false)
     private MemberEntity director;
 
     @ManyToMany(mappedBy = "services")
