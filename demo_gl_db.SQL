@@ -12,8 +12,8 @@ CREATE TABLE members (
     id SERIAL NOT NULL,
     firstname varchar(255) DEFAULT ''::text NOT NULL,
     lastname varchar(255) DEFAULT ''::text NOT NULL,
-    start_date timestamp NOT NULL,
-    end_date timestamp,
+    start_date TIMESTAMPTZ NOT NULL,
+    end_date TIMESTAMPTZ,
     CONSTRAINT members_pkey PRIMARY KEY (id)
 );
 CREATE TABLE members_to_roles (
