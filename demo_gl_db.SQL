@@ -12,7 +12,7 @@ CREATE TABLE members (
     id SERIAL NOT NULL,
     firstname varchar(255) DEFAULT ''::text NOT NULL,
     lastname varchar(255) DEFAULT ''::text NOT NULL,
-    start_date timestamp DEFAULT now() NOT NULL,
+    start_date timestamp NOT NULL,
     end_date timestamp,
     CONSTRAINT members_pkey PRIMARY KEY (id)
 );
