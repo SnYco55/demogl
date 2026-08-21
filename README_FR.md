@@ -1,5 +1,7 @@
 # DemoGL - Guide de lancement
 
+[Read in English](README.md)
+
 Ce guide permet de récupérer le projet et de le faire tourner en local, de la base de données jusqu'au frontend.
 
 ## Architecture
