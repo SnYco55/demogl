@@ -168,6 +168,12 @@ The API is available at:
 ```
 http://localhost:8080
 ```
+## 5.1 Fill the database
+Once your API is running, you can use the script `seed.ts` located in `frontend/src/config/`
+Run the script : (the Database must be empty)
+```bash
+node seed.ts
+```
 
 ---
 
