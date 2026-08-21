@@ -169,6 +169,14 @@ L'API est disponible sur :
 http://localhost:8080
 ```
 
+## 5.1 Remplir la base de données
+Une fois que votre api est lancé, vous pouvez exécuter la commande `seed.ts` qui se trouve dans `frontend/src/config/` pour remplir la base de données.
+
+Lancer le script : (La base de données doit être vide)
+```bash
+node seed.ts
+```
+
 ---
 
 ## 6. Documentation de l'API
