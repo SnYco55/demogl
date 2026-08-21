@@ -252,8 +252,7 @@ http://localhost:5173 (et API sur http://localhost:8080)
 | --- | --- | --- |
 | `.env` non pris en compte dans IntelliJ | Chargement automatique absent | Installer le plugin **EnvFile** et l'activer dans la config de lancement |
 | Connexion à la base impossible via Direct connection | Incompatibilité réseau IPv6/IPv4 | Utiliser le **Session Pooler** de Supabase à la place |
-| Variables `.env` non actives dans un nouveau terminal | Les exports ne persistent pas entre sessions | export $(cat .env | xargs)
-|
+| Variables `.env` non actives dans un nouveau terminal | Les exports ne persistent pas entre sessions | export $(cat .env | xargs) |
 | Endpoints absents de l'onglet Endpoints (IntelliJ) | Plugins Spring/Web désactivés | Vérifier leur activation dans `Settings → Plugins` |
 
 ---
