@@ -1,5 +1,7 @@
 # DemoGL - Guide de lancement
 
+[Read in English](README.md)
+
 Ce guide permet de récupérer le projet et de le faire tourner en local, de la base de données jusqu'au frontend.
 
 ## Architecture
@@ -167,6 +169,14 @@ L'API est disponible sur :
 http://localhost:8080
 ```
 
+## 5.1 Remplir la base de données
+Une fois que votre api est lancé, vous pouvez exécuter la commande `seed.ts` qui se trouve dans `frontend/src/config/` pour remplir la base de données.
+
+Lancer le script : (La base de données doit être vide)
+```bash
+node seed.ts
+```
+
 ---
 
 ## 6. Documentation de l'API
@@ -242,8 +252,7 @@ http://localhost:5173 (et API sur http://localhost:8080)
 | --- | --- | --- |
 | `.env` non pris en compte dans IntelliJ | Chargement automatique absent | Installer le plugin **EnvFile** et l'activer dans la config de lancement |
 | Connexion à la base impossible via Direct connection | Incompatibilité réseau IPv6/IPv4 | Utiliser le **Session Pooler** de Supabase à la place |
-| Variables `.env` non actives dans un nouveau terminal | Les exports ne persistent pas entre sessions | export $(cat .env | xargs)
-|
+| Variables `.env` non actives dans un nouveau terminal | Les exports ne persistent pas entre sessions | export $(cat .env | xargs) |
 | Endpoints absents de l'onglet Endpoints (IntelliJ) | Plugins Spring/Web désactivés | Vérifier leur activation dans `Settings → Plugins` |
 
 ---
