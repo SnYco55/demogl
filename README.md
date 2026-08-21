@@ -1,5 +1,7 @@
 # DemoGL - Launch guide
 
+[Lire en français](README_FR.md)
+
 This guide walks you through getting the project and running it locally, from the database up to the frontend.
 
 ## Architecture
