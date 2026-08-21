@@ -67,6 +67,10 @@ async function seed() {
     name: 'Chercheur',
   })
 
+  const assistant = await post<Role>('/roles', {
+    name: 'Assistant',
+  })
+
   const tom = await post<Member>('/members', {
     firstname: 'Tom',
     lastname: 'Mens',
