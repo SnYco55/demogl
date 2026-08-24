@@ -72,17 +72,15 @@ demogl/
 
 (ou tout autre client PostgreSQL compatible JDBC)
 
-1. Aller sur supabase.com et créer un compte / se connecter (avec github ou autre).
+1. Aller sur [supabase.com](https://supabase.com) et créer un compte / se connecter (avec GitHub ou autre).
 2. Créer un nouveau projet.
-3. **Choisir un mot de passe pour la base de données au moment de la création - le garder pour se connecter à la db après.**
+3. **Choisir un mot de passe pour la base de données au moment de la création - le garder pour se connecter à la DB après.**
 4. Une fois le projet créé, aller dans **Connect** pour récupérer les informations de connexion.
 5. Choisir **Direct Connection string**
-6. Choisir le mode **Direct connection**.
+6. Choisir le mode **Session pooler**.
+7. Choisir le type **JDBC**.
 
-> **Si la connexion directe échoue** (souvent un problème de compatibilité IPv6/IPv4 selon le réseau), utiliser le **Session Pooler** à la place - l'URL fournie change légèrement de format mais fonctionne de la même manière côté Spring Boot.
->
-
-Garder ces trois informations à portée de main pour l'étape suivante :
+Garder ces quatres informations à portée de main pour l'étape suivante :
 
 - host
 - username
@@ -98,9 +96,18 @@ Garder ces trois informations à portée de main pour l'étape suivante :
 À la **racine du projet** (là où se trouve `build.gradle`), créer un fichier `.env` :
 
 ```
-DB_URL=jdbc:postgresql://host:port/postgres
-DB_USERNAME=username
-DB_PASSWORD=password
+DB_URL='jdbc:postgresql://[HOST]:[PORT]/postgres'
+DB_USERNAME='[USERNAME]'
+DB_PASSWORD='[PASSWORD]'
+```
+**(postgres est le nom de base de données par défaut dans Supabase)**
+
+Voici un exemple de fichier `.env` :
+
+```
+DB_URL='jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres'
+DB_USERNAME='postgres.tttrpqqpsixghjtrkenj'
+DB_PASSWORD='mysecretpassword'
 ```
 
 ---
@@ -150,16 +157,15 @@ Get-ChildItem env:        # Windows PowerShell
 IntelliJ ne charge pas automatiquement les fichiers `.env`. Installer le plugin **EnvFile** (par Borys Pierov) :
 
 1. `Settings → Plugins` → rechercher **EnvFile** → installer et redémarrer IntelliJ.
-2. Ouvrir la configuration de lancement Spring Boot (`Run → Edit Configurations` ou alors voir photo).
+2. Ouvrir la configuration de lancement Spring Boot (`Run → Edit Configurations` ou alors voir capture d'écran).
 
-    ![image1](docs/images/image1.png)
+   ![image1](docs/images/image1.png)
 
 3. Activer l'onglet **EnvFile**, cocher "Enable EnvFile", puis ajouter le fichier `.env` du backend.
 
-    ![image2](docs/images/image2.png)
+   ![image2](docs/images/image2.png)
 
-
-Une fois configuré, IntelliJ injecte automatiquement les variables à chaque lancement - plus besoin de les exporter manuellement. (c’est persistant)
+Une fois configuré, IntelliJ injecte automatiquement les variables à chaque lancement - plus besoin de les exporter manuellement. (c'est persistant)
 
 ### Résultat
 
@@ -170,9 +176,11 @@ http://localhost:8080
 ```
 
 ## 5.1 Remplir la base de données
-Une fois que votre api est lancé, vous pouvez exécuter la commande `seed.ts` qui se trouve dans `frontend/src/config/` pour remplir la base de données.
 
-Lancer le script : (La base de données doit être vide)
+Une fois votre API lancée, dans un autre terminal vous pouvez utiliser le script `seed.ts` situé dans `frontend/src/config/`
+(L'API doit être lancée et la base de données doit être vide)
+
+Lancer le script :
 ```bash
 node seed.ts
 ```
@@ -189,7 +197,7 @@ Générée automatiquement à partir des `@RestController` (dépendance `springd
 | OpenAPI JSON | `http://localhost:8080/v3/api-docs` |
 | OpenAPI YAML | `http://localhost:8080/v3/api-docs.yaml` |
 
-Pour tester les endpoints directement sans outil externe (Postman/Insomnia), IntelliJ Ultimate propose un onglet natif **Endpoints** (`View → Tool Windows → Endpoints`) - vérifier que les plugins **Spring** et **Spring** **Web** sont activés, sinon les endpoints n'y apparaîtront pas.
+Pour tester les endpoints directement sans outil externe (Postman/Insomnia), IntelliJ Ultimate propose un onglet natif **Endpoints** (`View → Tool Windows → Endpoints`) - vérifier que les plugins **Spring** et **Spring Web** sont activés, sinon les endpoints n'y apparaîtront pas.
 
 ---
 
@@ -209,7 +217,7 @@ VITE_API_URL=http://localhost:8080
 
 Vite injecte automatiquement les variables préfixées `VITE_` donc aucune configuration supplémentaire nécessaire.
 
-Lancer le serveur de développement :
+Lancer le serveur de développement (depuis le dossier `frontend`) :
 
 ```bash
 npm run dev
@@ -252,7 +260,7 @@ http://localhost:5173 (et API sur http://localhost:8080)
 | --- | --- | --- |
 | `.env` non pris en compte dans IntelliJ | Chargement automatique absent | Installer le plugin **EnvFile** et l'activer dans la config de lancement |
 | Connexion à la base impossible via Direct connection | Incompatibilité réseau IPv6/IPv4 | Utiliser le **Session Pooler** de Supabase à la place |
-| Variables `.env` non actives dans un nouveau terminal | Les exports ne persistent pas entre sessions | export $(cat .env | xargs) |
+| Variables `.env` non actives dans un nouveau terminal | Les exports ne persistent pas entre sessions | export $(cat .env \| xargs) |
 | Endpoints absents de l'onglet Endpoints (IntelliJ) | Plugins Spring/Web désactivés | Vérifier leur activation dans `Settings → Plugins` |
 
 ---
@@ -262,10 +270,11 @@ http://localhost:5173 (et API sur http://localhost:8080)
 **Backend** (`.env`, à la racine du projet) :
 
 ```
-DB_URL=jdbc:postgresql://host:port/postgres
-DB_USERNAME=username
-DB_PASSWORD=password
+DB_URL=jdbc:postgresql://[HOST]:[PORT]/postgres
+DB_USERNAME=[USERNAME]
+DB_PASSWORD=[PASSWORD]
 ```
+**(postgres est le nom de base de données par défaut dans Supabase)**
 
 **Frontend** (`frontend/.env`) :
 
@@ -273,6 +282,6 @@ DB_PASSWORD=password
 VITE_API_URL=http://localhost:8080
 ```
 
-En production, `VITE_API_URL` doit pointer vers l'URL publique du backend déployé, et il faudra aussi ajouter l’adresse du frontend deployé dans le backend dans `config/CorsConfig`.
+En production, `VITE_API_URL` doit pointer vers l'URL publique du backend déployé, et il faudra aussi ajouter l'adresse du frontend déployé dans le backend dans `config/CorsConfig`.
 
 **Ne jamais committer les fichiers `.env`** - vérifier leur présence dans `.gitignore`.

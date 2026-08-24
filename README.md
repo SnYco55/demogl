@@ -72,17 +72,16 @@ demogl/
 
 (or any other JDBC-compatible PostgreSQL client)
 
-1. Go to supabase.com and create an account / sign in (with GitHub or otherwise).
+1. Go to [supabase.com](https://supabase.com) and create an account / sign in (with GitHub or otherwise).
 2. Create a new project.
-3. **Choose a database password when creating it — keep it to connect to the DB afterwards.**
+3. **Choose a database password when creating it - keep it to connect to the DB afterwards.**
 4. Once the project is created, go to **Connect** to retrieve the connection details.
 5. Choose **Direct Connection string**
-6. Choose **Direct connection** mode.
+6. Choose **Session pooler** mode.
+7. Choose Type **JDBC**.
 
-> **If the direct connection fails** (often an IPv6/IPv4 compatibility issue depending on the network), use the **Session Pooler** instead — the URL format changes slightly but works the same way on the Spring Boot side.
-> 
 
-Keep these three pieces of information handy for the next step:
+Keep these four pieces of information handy for the next step:
 
 - host
 - username
@@ -98,9 +97,18 @@ Keep these three pieces of information handy for the next step:
 At the **root of the project** (where `build.gradle` is located), create a `.env` file:
 
 ```
-DB_URL=jdbc:postgresql://host:port/postgres
-DB_USERNAME=username
-DB_PASSWORD=password
+DB_URL='jdbc:postgresql://[HOST]:[PORT]/postgres'
+DB_USERNAME='[USERNAME]'
+DB_PASSWORD='[PASSWORD]'
+```
+**(postgres is the default database name in Supabase)**
+
+here is an example of a `.env` file:
+    
+```
+DB_URL='jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres'
+DB_USERNAME='postgres.tttrpqqpsixghjtrkenj'
+DB_PASSWORD='mysecretpassword'
 ```
 
 ---
@@ -154,12 +162,12 @@ IntelliJ does not automatically load `.env` files. Install the **EnvFile** plugi
     
     ![image1](docs/images/image1.png)
     
-3. Enable the **EnvFile** tab, check "Enable EnvFile", then add the backend's `.env` file.
+3. To enable the **EnvFile** tab, check "Enable EnvFile", then add the backend's `.env`.
     
     ![image2](docs/images/image2.png)
     
 
-Once configured, IntelliJ automatically injects the variables on every run — no need to export them manually anymore. (this setting persists)
+Once configured, IntelliJ automatically injects the variables on every run - no need to export them manually anymore. (this setting persists)
 
 ### Result
 
@@ -169,9 +177,10 @@ The API is available at:
 http://localhost:8080
 ```
 ## 5.1 Fill the database
-Once your API is running, you can use the script `seed.ts` located in `frontend/src/config/`
+Once your API is running, in another terminal, you can use the script `seed.ts` located in `frontend/src/config/`
+(The API must be running and the database must be empty)
 
-Run the script : (the database must be empty)
+Run the script :
 ```bash
 node seed.ts
 ```
@@ -188,7 +197,7 @@ Automatically generated from the `@RestController` classes (via the `springdoc-o
 | OpenAPI JSON | `http://localhost:8080/v3/api-docs` |
 | OpenAPI YAML | `http://localhost:8080/v3/api-docs.yaml` |
 
-To test endpoints directly without an external tool (Postman/Insomnia), IntelliJ Ultimate offers a native **Endpoints** tab (`View → Tool Windows → Endpoints`) — make sure the **Spring** and **Spring Web** plugins are enabled, otherwise the endpoints won't show up there.
+To test endpoints directly without an external tool (Postman/Insomnia), IntelliJ Ultimate offers a native **Endpoints** tab (`View → Tool Windows → Endpoints`) - make sure the **Spring** and **Spring Web** plugins are enabled, otherwise the endpoints won't show up there.
 
 ---
 
@@ -208,7 +217,7 @@ VITE_API_URL=http://localhost:8080
 
 Vite automatically injects variables prefixed with `VITE_`, so no additional configuration is needed.
 
-Start the development server:
+Start the development server (from the `frontend` folder):
 
 ```bash
 npm run dev
@@ -222,7 +231,7 @@ http://localhost:5173
 
 ---
 
-## 8. Full startup - summary
+## 8. Full startup - summarytttrpqqpsix
 
 Once both `.env` files are configured (backend and frontend):
 
@@ -247,11 +256,11 @@ http://localhost:5173 (and API at http://localhost:8080)
 
 ## 9. Troubleshooting
 
-| Problem | Likely cause | Solution |
-| --- | --- | --- |
+| Problem | Likely cause | Solution                                      |
+| --- | --- |-----------------------------------------------|
 | `.env` not picked up in IntelliJ | No automatic loading | Install the **EnvFile** plugin and enable it in the run configuration |
-| Cannot connect to the database via Direct connection | IPv6/IPv4 network incompatibility | Use Supabase's **Session Pooler** instead |
-| `.env` variables not active in a new terminal | Exports don't persist across sessions | export $(cat .env | xargs) |
+| Cannot connect to the database via Direct connection | IPv6/IPv4 network incompatibility | Use Supabase's **Session Pooler** instead     |
+| `.env` variables not active in a new terminal | Exports don't persist across sessions | export $(cat .env \| xargs)                   |
 | Endpoints missing from the Endpoints tab (IntelliJ) | Spring/Web plugins disabled | Check they're enabled in `Settings → Plugins` |
 
 ---
@@ -261,10 +270,11 @@ http://localhost:5173 (and API at http://localhost:8080)
 **Backend** (`.env`, at the project root):
 
 ```
-DB_URL=jdbc:postgresql://host:port/postgres
-DB_USERNAME=username
-DB_PASSWORD=password
+DB_URL=jdbc:postgresql://[HOST]:[PORT]/postgres
+DB_USERNAME=[USERNAME]
+DB_PASSWORD=[PASSWORD]
 ```
+**(postgres is the default database name in Supabase)**
 
 **Frontend** (`frontend/.env`):
 
