@@ -161,7 +161,7 @@ IntelliJ ne charge pas automatiquement les fichiers `.env`. Installer le plugin 
 
    ![image1](docs/images/image1.png)
 
-3. Activer l'onglet **EnvFile**, cocher "Enable EnvFile", puis ajouter le fichier `.env` du backend.
+3. Pour activer **EnvFile**, cocher "Enable EnvFile", puis ajouter le fichier `.env` du backend.
 
    ![image2](docs/images/image2.png)
 
