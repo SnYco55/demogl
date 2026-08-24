@@ -2,6 +2,8 @@
 
 [Read in English](README.md)
 
+[Guide complet](docs/GUIDE.md)
+
 Ce guide permet de récupérer le projet et de le faire tourner en local, de la base de données jusqu'au frontend.
 
 ## Architecture
