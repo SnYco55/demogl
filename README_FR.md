@@ -42,7 +42,7 @@ Le **Gradle Wrapper** est inclus dans le projet : pas besoin d'installer Gradle 
 ## 2. Cloner le projet
 
 ```bash
-git clone https://github.com/SnYco55/demogl.git
+git clone https://github.com/sgl-umons/demogl.git
 cd demogl
 ```
 
