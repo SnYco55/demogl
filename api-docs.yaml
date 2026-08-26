@@ -1,0 +1,707 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /services:
+    get:
+      tags:
+      - service-controller
+      operationId: getServices
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ServiceListResponse"
+    post:
+      tags:
+      - service-controller
+      operationId: createService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceCreateRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ServiceDetailsResponse"
+  /roles:
+    get:
+      tags:
+      - role-controller
+      operationId: getRoles
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RoleResponse"
+    post:
+      tags:
+      - role-controller
+      operationId: createRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RoleResponse"
+  /members:
+    get:
+      tags:
+      - member-controller
+      operationId: getMembers
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MemberListResponse"
+    post:
+      tags:
+      - member-controller
+      operationId: createMember
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemberCreateRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MemberDetailsResponse"
+  /faculties:
+    get:
+      tags:
+      - faculty-controller
+      operationId: getFaculties
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FacultyResponse"
+    post:
+      tags:
+      - faculty-controller
+      operationId: createFaculty
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FacultyCreateRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FacultyResponse"
+  /departments:
+    get:
+      tags:
+      - department-controller
+      operationId: getDepartments
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DepartmentResponse"
+    post:
+      tags:
+      - department-controller
+      operationId: createDepartment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepartmentCreateRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DepartmentResponse"
+  /services/{id}:
+    get:
+      tags:
+      - service-controller
+      operationId: getServiceById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ServiceDetailsResponse"
+    delete:
+      tags:
+      - service-controller
+      operationId: deleteService
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+    patch:
+      tags:
+      - service-controller
+      operationId: updateService
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServicePatchRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ServiceDetailsResponse"
+  /roles/{id}:
+    get:
+      tags:
+      - role-controller
+      operationId: getRoleById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RoleResponse"
+    delete:
+      tags:
+      - role-controller
+      operationId: deleteRole
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "204":
+          description: No Content
+    patch:
+      tags:
+      - role-controller
+      operationId: updateRole
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RoleResponse"
+  /members/{id}:
+    get:
+      tags:
+      - member-controller
+      operationId: getMember
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MemberDetailsResponse"
+    delete:
+      tags:
+      - member-controller
+      operationId: deleteMember
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "204":
+          description: No Content
+    patch:
+      tags:
+      - member-controller
+      operationId: updateMember
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemberPatchRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MemberDetailsResponse"
+  /faculties/{id}:
+    get:
+      tags:
+      - faculty-controller
+      operationId: getFaculty
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FacultyResponse"
+    delete:
+      tags:
+      - faculty-controller
+      operationId: deleteFaculty
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+    patch:
+      tags:
+      - faculty-controller
+      operationId: updateFaculty
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FacultyPatchRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FacultyResponse"
+  /departments/{id}:
+    get:
+      tags:
+      - department-controller
+      operationId: getDepartmentById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DepartmentResponse"
+    delete:
+      tags:
+      - department-controller
+      operationId: deleteDepartment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+    patch:
+      tags:
+      - department-controller
+      operationId: updateDepartment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepartmentPatchRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DepartmentResponse"
+  /services/{id}/faculty:
+    get:
+      tags:
+      - service-controller
+      operationId: getFacultyByServiceId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FacultyResponse"
+  /services/{id}/director:
+    get:
+      tags:
+      - service-controller
+      operationId: getDirectorByServiceId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MemberListResponse"
+  /services/{id}/department:
+    get:
+      tags:
+      - service-controller
+      operationId: getDepartmentByServiceId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DepartmentResponse"
+  /departments/{id}/faculty:
+    get:
+      tags:
+      - department-controller
+      operationId: getFacultyByDepartmentId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FacultyResponse"
+  /:
+    get:
+      tags:
+      - home-controller
+      operationId: home
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    ServiceCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        departmentId:
+          type: string
+        directorId:
+          type: integer
+          format: int32
+    DepartmentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        facultyId:
+          type: string
+    FacultyResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    MemberListResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+    ServiceDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        department:
+          $ref: "#/components/schemas/DepartmentResponse"
+        faculty:
+          $ref: "#/components/schemas/FacultyResponse"
+        director:
+          $ref: "#/components/schemas/MemberListResponse"
+    RoleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    RoleResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    MemberCreateRequest:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        serviceIds:
+          type: array
+          items:
+            type: string
+        roleIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+    MemberDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        lastname:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceDetailsResponse"
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoleResponse"
+    FacultyCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    DepartmentCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        facultyId:
+          type: string
+    ServicePatchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        departmentId:
+          type: string
+        directorId:
+          type: integer
+          format: int32
+    MemberPatchRequest:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        serviceIds:
+          type: array
+          items:
+            type: string
+        roleIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+    FacultyPatchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    DepartmentPatchRequest:
+      type: object
+      properties:
+        facultyId:
+          type: string
+    ServiceListResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        departmentId:
+          type: string
+        directorId:
+          type: integer
+          format: int32
