@@ -171,11 +171,11 @@ Installez le plugin **EnvFile** (par Borys Pierov) :
 1. `Settings → Plugins` → recherchez **EnvFile** → installez et redémarrez IntelliJ.
 2. Ouvrez la configuration de lancement Spring Boot (`Run → Edit Configurations` ou alors voir capture d'écran).
 
-   ![image1](docs/images/image1.png)
+   ![image1](images/image1.png)
 
 3. Pour activer **EnvFile**, cochez "Enable EnvFile", puis ajoutez le fichier `.env` du backend.
 
-   ![image2](docs/images/image2.png)
+   ![image2](images/image2.png)
 
 Une fois configuré, IntelliJ injecte automatiquement les variables à chaque lancement - plus besoin de les exporter manuellement (c'est persistant).
 
