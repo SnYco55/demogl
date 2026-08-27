@@ -172,11 +172,11 @@ IntelliJ does not automatically load `.env` files. Install the **EnvFile** plugi
 1. `Settings → Plugins` → search for **EnvFile** → install and restart IntelliJ.
 2. Open the Spring Boot run configuration (`Run → Edit Configurations`, or see screenshot).
     
-    ![image1](docs/images/image1.png)
+    ![image1](images/image1.png)
     
 3. To enable the **EnvFile** tab, check "Enable EnvFile", then add the backend's `.env`.
     
-    ![image2](docs/images/image2.png)
+    ![image2](images/image2.png)
     
 Once configured, IntelliJ automatically injects the variables on every run - no need to export them manually anymore. (this setting persists)
 
