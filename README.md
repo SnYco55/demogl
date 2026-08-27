@@ -78,7 +78,7 @@ demogl/
 │   └── test/              ← Java tests
 └── frontend/
     ├── .env               ← frontend config
-    ├── src/
+    ├── src/               ← frontend source code
     ├── package.json
     └── vite.config.ts
 ```
@@ -156,13 +156,13 @@ export DB_USERNAME=...
 Use `gradlew` to run the API:
 
 ```bash
-./gradlew bootRun       # Linux / macOS
+./gradlew bootRun
 ```
 
 Check that the variables are correctly loaded:
 
 ```bash
-export -p                 # Linux / macOS
+export -p
 ```
 
 #### Windows (PowerShell):
@@ -178,13 +178,13 @@ $env:DB_PASSWORD="..."
 Use `gradlew` to run the API:
 
 ```bash
-.\gradlew bootRun       # Windows
+.\gradlew bootRun
 ```
 
 Check that the variables are correctly loaded:
 
 ```bash
-Get-ChildItem env:        # Windows PowerShell
+Get-ChildItem env:
 ```
 
 ### Option B (useful if you need to modify the code) - Running from within an IDE
@@ -219,10 +219,9 @@ http://localhost:8080
 
 ## Populate the database
 
-Once your API is running, in a separate terminal, you can use the script `seed.ts` located in `frontend/src/config/`
+Once your API is running, in a separate terminal, run the script `seed.ts` located in `frontend/src/config/`
 (The API must be running and the database must be empty)
 
-Run the script :
 ```bash
 node seed.ts
 ```
