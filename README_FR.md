@@ -1,5 +1,7 @@
 # Guide de lancement
 
+*Si vous rencontrez des ambiguités, erreurs, ou incomplétudes dans ce guide, ouvrez un ticket (Isssue) dans ce dépôt pour nous en faire part.*
+
 [Read in English](README.md)
 
 [Lire le guide complet ici](docs/GUIDE.md)
@@ -203,7 +205,7 @@ node seed.ts
 
 ## Documentation de l'API
 
-Générée automatiquement à partir des `@RestController` (dépendance `springdoc-openapi-starter-webmvc-ui`) :
+La documentation OpenAPI est générée automatiquement à partir des `@RestController` (dépendance `springdoc-openapi-starter-webmvc-ui`) :
 
 | Format | URL |
 | --- | --- |
@@ -211,11 +213,11 @@ Générée automatiquement à partir des `@RestController` (dépendance `springd
 | OpenAPI JSON | `http://localhost:8080/v3/api-docs` |
 | OpenAPI YAML | `http://localhost:8080/v3/api-docs.yaml` |
 
-Pour tester les endpoints directement sans outil externe (Postman/Insomnia), IntelliJ Ultimate propose un onglet natif **Endpoints** (`View → Tool Windows → Endpoints`) - vérifier que les plugins **Spring** et **Spring Web** sont activés, sinon les endpoints n'y apparaîtront pas.
+Pour tester les endpoints directement sans outil externe (Postman, Insomnia ou Swagger), IntelliJ Ultimate propose un onglet natif **Endpoints** (`View → Tool Windows → Endpoints`) - vérifiez que les plugins **Spring** et **Spring Web** sont activés, sinon les endpoints n'y apparaîtront pas.
 
 ---
 
-## 7. Configurer et lancer le frontend
+## Configurez et lancez le frontend
 
 Depuis le dossier `frontend` :
 
@@ -223,7 +225,7 @@ Depuis le dossier `frontend` :
 npm install
 ```
 
-Créer un fichier `frontend/.env` :
+Créez une variable d'environnement dans le fichier `frontend/.env` :
 
 ```
 VITE_API_URL=http://localhost:8080
@@ -231,7 +233,7 @@ VITE_API_URL=http://localhost:8080
 
 Vite injecte automatiquement les variables préfixées `VITE_` donc aucune configuration supplémentaire nécessaire.
 
-Lancer le serveur de développement (depuis le dossier `frontend`) :
+Lancez le serveur de développement (depuis le dossier `frontend`) :
 
 ```bash
 npm run dev
@@ -243,11 +245,13 @@ Le frontend est disponible sur :
 http://localhost:5173
 ```
 
+**Note :** En production, `VITE_API_URL` doit pointer vers l'URL publique du backend déployé, et il faudra aussi ajouter l'adresse du frontend déployé dans le backend dans `config/CorsConfig`.
+
 ---
 
-## 8. Lancement complet - résumé
+## Lancement complet - résumé
 
-Une fois les deux `.env` configurés (backend et frontend) :
+Une fois que les fichiers d'environnement `.env` du backend et frontend sont configurés, lancez :
 
 ```bash
 # Terminal 1 - Backend (depuis la racine du projet)
@@ -260,7 +264,7 @@ npm install
 npm run dev
 ```
 
-Puis ouvrir :
+Puis ouvrez :
 
 ```
 http://localhost:5173 (et API sur http://localhost:8080)
@@ -268,7 +272,7 @@ http://localhost:5173 (et API sur http://localhost:8080)
 
 ---
 
-## 9. Dépannage
+## Dépannage
 
 | Problème | Cause probable | Solution |
 | --- | --- | --- |
@@ -276,26 +280,3 @@ http://localhost:5173 (et API sur http://localhost:8080)
 | Connexion à la base impossible via Direct connection | Incompatibilité réseau IPv6/IPv4 | Utiliser le **Session Pooler** de Supabase à la place |
 | Variables `.env` non actives dans un nouveau terminal | Les exports ne persistent pas entre sessions | export $(cat .env \| xargs) |
 | Endpoints absents de l'onglet Endpoints (IntelliJ) | Plugins Spring/Web désactivés | Vérifier leur activation dans `Settings → Plugins` |
-
----
-
-## 10. Variables d'environnement - récapitulatif
-
-**Backend** (`.env`, à la racine du projet) :
-
-```
-DB_URL=jdbc:postgresql://[HOST]:[PORT]/postgres
-DB_USERNAME=[USERNAME]
-DB_PASSWORD=[PASSWORD]
-```
-**(postgres est le nom de base de données par défaut dans Supabase)**
-
-**Frontend** (`frontend/.env`) :
-
-```
-VITE_API_URL=http://localhost:8080
-```
-
-En production, `VITE_API_URL` doit pointer vers l'URL publique du backend déployé, et il faudra aussi ajouter l'adresse du frontend déployé dans le backend dans `config/CorsConfig`.
-
-**Ne jamais committer les fichiers `.env`** - vérifier leur présence dans `.gitignore`.
