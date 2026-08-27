@@ -2,7 +2,7 @@
 
 *Si vous rencontrez des ambiguités, erreurs, ou incomplétudes dans ce guide, ouvrez un ticket (Isssue) dans ce dépôt pour nous en faire part.*
 
-[Read the English version of this guide here](docs/LAUNCH_EN.md)
+[Read the English version of this guide here](/docs/LAUNCH_EN.md)
 
 Ce guide permet d'installer et de faire tourner le projet en local, de la base de données au travers du backend jusqu'au frontend.
 
