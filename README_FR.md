@@ -1,52 +1,42 @@
-# DemoGL - Guide de lancement
+# Guide de lancement
 
 [Read in English](README.md)
 
-[Guide complet](docs/GUIDE.md)
+[Lire le guide complet ici](docs/GUIDE.md)
 
-Ce guide permet de récupérer le projet et de le faire tourner en local, de la base de données jusqu'au frontend.
-
-## Architecture
-
-- **Frontend** : Vue.js + TypeScript + Tailwind CSS
-- **Backend** : Java 25 + Spring Boot + Gradle
-- **API** : REST + OpenAPI (Swagger)
-- **Database** : PostgreSQL (Supabase)
-
-```
-Frontend (Vue.js)
-       │  REST
-       ▼
-Backend (Spring Boot)
-       │  JPA / JDBC
-       ▼
-PostgreSQL (Supabase)
-```
+Ce guide permet d'installer et de faire tourner le projet en local, de la base de données au travers du backend jusqu'au frontend.
 
 ---
 
-## 1. Prérequis
+## Prérequis
 
-À installer avant de commencer :
+Assurez-vous d'installer les outils logiciels suivants avant de commencer :
 
-| Outil | Usage |
-| --- | --- |
-| Java 25 | Compiler/lancer le backend |
-| Node.js + npm | Frontend |
-| Git | Cloner le projet |
+| Outil | Usage | Version |
+| --- | --- | --- |
+| Java | Pour compiler et exécuter le backend | Java 25 LTS |
+| Gradle | Pour lancer le backend | | 
+| Node.js + npm | Pour exécuter le frontend | |
+<!-- | Git | Pour cloner le projet | -->
 
-Le **Gradle Wrapper** est inclus dans le projet : pas besoin d'installer Gradle séparément.
+<!-- Le **Gradle Wrapper** est inclus dans le projet : pas besoin d'installer Gradle séparément. -->
 
 ---
 
-## 2. Cloner le projet
+## Clonez le projet
 
+Localisez l'archive du projet dans le dernier Release de ce dépôt GitHub.
+
+Téléchargez cette archive dans un répertoire local "demogl" sur votre machine. 
+
+<!-- 
 ```bash
 git clone https://github.com/sgl-umons/demogl.git
 cd demogl
 ```
+-->
 
-Structure du projet :
+Le contenu de ce répertoire devrait suivre la structure suivante (possiblement avec quelques sous-répertoires et fichiers supplémentaires qui ne sont pas pertinent pour ce guide) :
 
 ```
 demogl/
@@ -54,35 +44,35 @@ demogl/
 ├── settings.gradle
 ├── gradlew
 ├── gradlew.bat
-├── .env                  ← config backend
-├── src/
-│   ├── main/
+├── .env              ← config backend
+├── src/              ← backend
+│   ├── main/           ← code source Java     
 │   │   ├── java/com/example/demo/
 │   │   └── resources/
 │   │       └── application.yaml
-│   └── test/
-└── frontend/
-    ├── .env               ← config frontend
-    ├── src/
+│   └── test/           ← tests Java
+└── frontend/         ← frondend
+    ├── .env            ← config frontend
+    ├── src/            ← code source frontend
     ├── package.json
     └── vite.config.ts
 ```
 
 ---
 
-## 3. Configurer la base de données (Supabase)
+## Configurez la base de données PostgreSQL
 
-(ou tout autre client PostgreSQL compatible JDBC)
+Les instructions supposent l'utilisation de Supabase. Vous pouvez utilisez tout autre client PostgreSQL compatible avec JDBC.
 
-1. Aller sur [supabase.com](https://supabase.com) et créer un compte / se connecter (avec GitHub ou autre).
-2. Créer un nouveau projet.
-3. **Choisir un mot de passe pour la base de données au moment de la création - le garder pour se connecter à la DB après.**
-4. Une fois le projet créé, aller dans **Connect** pour récupérer les informations de connexion.
-5. Choisir **Direct Connection string**
-6. Choisir le mode **Session pooler**.
-7. Choisir le type **JDBC**.
+1. Allez sur [supabase.com](https://supabase.com), créez un compte, et connectez vous.
+2. Créez un nouveau projet.
+3. **Choisissez un mot de passe pour la base de données au moment de la création. Gardez-le pour se connecter à la DB après.**
+4. Une fois le projet créé, allez dans **Connect** pour récupérer les informations de connexion.
+5. Choisissez **Direct Connection string**
+6. Choisissez le mode **Session pooler**.
+7. Choisissez le type **JDBC**.
 
-Garder ces quatres informations à portée de main pour l'étape suivante :
+Gardez ces quatres informations à portée de main pour l'étape suivante :
 
 - host
 - username
@@ -91,18 +81,19 @@ Garder ces quatres informations à portée de main pour l'étape suivante :
 
 ---
 
-## 4. Configurer le backend
+## Configurez le backend
 
-### 4.1 Créer le fichier `.env`
+### Créez les variables d'environnement
 
-À la **racine du projet** (là où se trouve `build.gradle`), créer un fichier `.env` :
+Vous avez besoin de variables d'environnement pour accéder à la base de données distante.
+Pour ce faire, créez un fichier `.env` à la **racine du projet** (là où se trouve `build.gradle`) :
 
 ```
 DB_URL='jdbc:postgresql://[HOST]:[PORT]/postgres'
 DB_USERNAME='[USERNAME]'
 DB_PASSWORD='[PASSWORD]'
 ```
-**(postgres est le nom de base de données par défaut dans Supabase)**
+**(`postgres` est le nom par défaut de la base de données dans Supabase. Si vous le changez, n'oubliez pas de modifiez aussi le fichier `.env`)**
 
 Voici un exemple de fichier `.env` :
 
@@ -112,27 +103,45 @@ DB_USERNAME='postgres.tttrpqqpsixghjtrkenj'
 DB_PASSWORD='mysecretpassword'
 ```
 
+**Attention!** Ne committez et pushez **jamais** les fichiers `.env` dans votre dépôt Git. Ils contiennent des informations confidentielles et sensibles (telles que votre nom d'utilisateur et votre mot de passe) que vous ne souhaitez pas voir utilisées à mauvais escient par des tiers ! Veillez à ajouter les fichiers `.env` au fichier `.gitignore` afin d'éviter de les pusher par inadvertance.
+
 ---
 
-## 5. Lancer le backend
+## Lancez le backend
 
-### Option A - Gradle avec gradlew
+### Option A (recommandé) - Lancez Gradle d'un terminal
 
-Le `.env` doit être chargé dans l'environnement **avant** de lancer Gradle, depuis la racine du projet. La méthode dépend de l'outil utilisé.
+Chargez le contenu du `.env` dans l'environnement **avant** de lancer Gradle, depuis la racine du projet. La méthode dépend de l'OS utilisé.
 
-**Linux / macOS**, dans un terminal à la racine du projet :
+#### Linux / macOS :
+
+Dans un terminal à la racine du projet :
 
 ```bash
 export $(cat .env | xargs)
 ```
 
-ou alors :
+ou alors (pour exporter une variable à la fois) :
 
 ```bash
-export DB_URL=url... (variable par variable)
+export DB_URL=...
+export DB_USERNAME=...
+export DB_PASSWORD=...
 ```
 
-**Windows (PowerShell)**, variable par variable :
+Puis lancez l'API :
+
+```bash
+./gradlew bootRun
+```
+
+Vérifiez que les variables d'environnement sont bien actives :
+
+```bash
+export -p
+```
+
+#### Windows (PowerShell) :
 
 ```powershell
 $env:DB_URL="..."
@@ -140,34 +149,37 @@ $env:DB_USERNAME="..."
 $env:DB_PASSWORD="..."
 ```
 
-Puis lancer l'API :
+Puis lancez l'API :
 
 ```bash
-./gradlew bootRun       # Linux / macOS
 .\gradlew bootRun       # Windows
 ```
 
-Pour vérifier que les variables sont bien actives :
+Vérifiez que les variables d'environnement sont bien actives :
 
 ```bash
-export -p                 # Linux / macOS
-Get-ChildItem env:        # Windows PowerShell
+Get-ChildItem env:
 ```
 
-### Option B - Dans IntelliJ IDEA
+### Option B (si vous avez besoin de consulter et éditer le code source) - Exécution dans une IDE
 
-IntelliJ ne charge pas automatiquement les fichiers `.env`. Installer le plugin **EnvFile** (par Borys Pierov) :
+Ce guide explique seulement pour IntelliJ IDEA car c'est l'IDE que nous recommandons.
 
-1. `Settings → Plugins` → rechercher **EnvFile** → installer et redémarrer IntelliJ.
-2. Ouvrir la configuration de lancement Spring Boot (`Run → Edit Configurations` ou alors voir capture d'écran).
+#### Installer un plugin
+
+IntelliJ ne charge pas automatiquement les fichiers `.env`.
+Installez le plugin **EnvFile** (par Borys Pierov) :
+
+1. `Settings → Plugins` → recherchez **EnvFile** → installez et redémarrez IntelliJ.
+2. Ouvrez la configuration de lancement Spring Boot (`Run → Edit Configurations` ou alors voir capture d'écran).
 
    ![image1](docs/images/image1.png)
 
-3. Pour activer **EnvFile**, cocher "Enable EnvFile", puis ajouter le fichier `.env` du backend.
+3. Pour activer **EnvFile**, cochez "Enable EnvFile", puis ajoutez le fichier `.env` du backend.
 
    ![image2](docs/images/image2.png)
 
-Une fois configuré, IntelliJ injecte automatiquement les variables à chaque lancement - plus besoin de les exporter manuellement. (c'est persistant)
+Une fois configuré, IntelliJ injecte automatiquement les variables à chaque lancement - plus besoin de les exporter manuellement (c'est persistant).
 
 ### Résultat
 
@@ -177,19 +189,19 @@ L'API est disponible sur :
 http://localhost:8080
 ```
 
-## 5.1 Remplir la base de données
+---
+## Remplissez la base de données
 
-Une fois votre API lancée, dans un autre terminal vous pouvez utiliser le script `seed.ts` situé dans `frontend/src/config/`
-(L'API doit être lancée et la base de données doit être vide)
+Une fois votre API lancée, dans un autre terminal, lancez le script `seed.ts` situé dans `frontend/src/config/`
+(L'API doit être lancée et la base de données doit être vide.)
 
-Lancer le script :
 ```bash
 node seed.ts
 ```
 
 ---
 
-## 6. Documentation de l'API
+## Documentation de l'API
 
 Générée automatiquement à partir des `@RestController` (dépendance `springdoc-openapi-starter-webmvc-ui`) :
 
