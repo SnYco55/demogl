@@ -1,4 +1,10 @@
-# DemoGL - Launch guide
+# DemoGL
+
+This repository serves as a teaching example, used at by the Software Engineering Lab of UMONS in the context of some courses and projects. 
+The project is intentionally minimalistic and incomplete, as it only serves as a proof-of-concept demonstrator of how to use and combine different software development technologies.
+It demonstrates how to build a three-tiered software architecture of a client-server web application, with a backend containing the business logic (in Java) that connects to a relational SQL database, and a frontend containing the web interface that interacts with the backend through a REST API. The purpose of the web application itself is to show and edit the organisational structure of the university (composed of faculties, departments, services, and members). It comes with a read-only user interface, and a read-write administration interface.
+
+# Launch guide
 
 [Lire en français](README_FR.md)
 
