@@ -4,55 +4,64 @@ This repository serves as a teaching example, used at by the Software Engineerin
 The project is intentionally minimalistic and incomplete, as it only serves as a proof-of-concept demonstrator of how to use and combine different software development technologies.
 It demonstrates how to build a three-tiered software architecture of a client-server web application, with a backend containing the business logic (in Java) that connects to a relational SQL database, and a frontend containing the web interface that interacts with the backend through a REST API. The purpose of the web application itself is to show and edit the organisational structure of the university (composed of faculties, departments, services, and members). It comes with a read-only user interface, and a read-write administration interface.
 
-# Launch guide
-
-[Lire en français](README_FR.md)
-
-[Full Guide](docs/GUIDE.md)
-
-This guide walks you through getting the project and running it locally, from the database up to the frontend.
-
 ## Architecture
 
 - **Frontend**: Vue.js + TypeScript + Tailwind CSS
 - **Backend**: Java 25 + Spring Boot + Gradle
-- **API**: REST + OpenAPI (Swagger)
+- **REST API**: OpenAPI (Swagger)
 - **Database**: PostgreSQL (Supabase)
 
 ```
 Frontend (Vue.js)
-       │  REST
+       │  
+       │  REST API
        ▼
-Backend (Spring Boot)
-       │  JPA / JDBC
+Backend (Java 25 + Spring Boot)
+       │  
+       │  JDBC + JPA
        ▼
 PostgreSQL (Supabase)
 ```
 
----
+# Launch guide
 
-## 1. Prerequisites
+[Lire en français](README_FR.md)
 
-To install before starting:
+The current guide explains how to install and run the project locally, from the database through the backend up to the frontend.
 
-| Tool | Purpose |
-| --- | --- |
-| Java 25 | Build/run the backend |
-| Node.js + npm | Frontend |
-| Git | Clone the project |
-
-The **Gradle Wrapper** is included in the project: no need to install Gradle separately.
+A full guide is available here: [Full Guide](docs/GUIDE.md)
 
 ---
 
-## 2. Clone the project
+## Prerequisites
 
+Make sure you have the following tools installed on your machine before starting:
+
+| Tool | Purpose | Version |
+| --- | --- | --- |
+| Java | To compile and run the backend | Java 25 LTS |
+| gradle | To build the backend | |
+| Node.js + npm | To run the frontend | |
+<!-- | Git | Clone the project | | -->
+
+<!-- The **Gradle Wrapper** is included in the project: no need to install Gradle separately. -->
+
+---
+
+## Download the project
+
+Locate the archive in the latest Release of this GitHub repository.
+
+Download it in a local directory folder named "demogl" on your machine.
+
+<!--
 ```bash
 git clone https://github.com/sgl-umons/demogl.git
 cd demogl
 ```
+-->
 
-Project structure:
+The contents of this directory structure should look as follows (with possibly some extra folders and files that are not relevant for the current guide):
 
 ```
 demogl/
@@ -62,11 +71,11 @@ demogl/
 ├── gradlew.bat
 ├── .env                  ← backend config
 ├── src/
-│   ├── main/
+│   ├── main/             ← Java source code
 │   │   ├── java/com/example/demo/
 │   │   └── resources/
 │   │       └── application.yaml
-│   └── test/
+│   └── test/              ← Java tests
 └── frontend/
     ├── .env               ← frontend config
     ├── src/
@@ -76,9 +85,10 @@ demogl/
 
 ---
 
-## 3. Set up the database (Supabase)
+## Set up the PostgreSQL database
 
-(or any other JDBC-compatible PostgreSQL client)
+The instructions below are for the Supabase hosting service.
+Alternatively, you can use any other JDBC-compatible PostgreSQL client.
 
 1. Go to [supabase.com](https://supabase.com) and create an account / sign in (with GitHub or otherwise).
 2. Create a new project.
@@ -87,7 +97,6 @@ demogl/
 5. Choose **Direct Connection string**
 6. Choose **Session pooler** mode.
 7. Choose Type **JDBC**.
-
 
 Keep these four pieces of information handy for the next step:
 
@@ -98,20 +107,21 @@ Keep these four pieces of information handy for the next step:
 
 ---
 
-## 4. Configure the backend
+## Configure the backend
 
-### 4.1 Create the `.env` file
+### Create environment variables
 
-At the **root of the project** (where `build.gradle` is located), create a `.env` file:
+You need **environment variables** for accessing the remote database from your machine.
+To do so, at the **root of the project** (where `build.gradle` is located), create a `.env` file based on the following template:
 
 ```
 DB_URL='jdbc:postgresql://[HOST]:[PORT]/postgres'
 DB_USERNAME='[USERNAME]'
 DB_PASSWORD='[PASSWORD]'
 ```
-**(postgres is the default database name in Supabase)**
+**(`postgres` is the default database name in Supabase. You can change it if you want, but do not forget to modify the `.env` file accordingly)**
 
-here is an example of a `.env` file:
+Here is a concrete example of a `.env` file:
     
 ```
 DB_URL='jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres'
@@ -119,27 +129,45 @@ DB_USERNAME='postgres.tttrpqqpsixghjtrkenj'
 DB_PASSWORD='mysecretpassword'
 ```
 
+**Attention!** Never commit and push  `.env` files to your git repository. They contain confidential and sensitive information (such as your username and password) that you do not want others to abuvse! Make sure to list `.env` files in the `.gitignore` instructions to avoid accidentally committing them.
+
 ---
 
-## 5. Run the backend
+## Run the backend
 
-### Option A - Gradle with gradlew
+### Option A (recommended) - Running Gradle directly from the terminal
 
-The `.env` file must be loaded into the environment **before** running Gradle, from the project root. The method depends on the tool you're using.
+Load the `.env` file from the project root into the environment **before** running Gradle. The method depends on the OS you're using.
 
-**Linux / macOS**, in a terminal at the project root:
+#### Linux / macOS:
+
+Run the following command in a terminal at the project root:
 
 ```bash
 export $(cat .env | xargs)
 ```
 
-or alternatively:
+or alternatively, export one variable at a time from the `.env` file:
 
 ```bash
-export DB_URL=url... (one variable at a time)
+export DB_URL=...
+export DB_USERNAME=...
+```
+Use `gradlew` to run the API:
+
+```bash
+./gradlew bootRun       # Linux / macOS
 ```
 
-**Windows (PowerShell)**, one variable at a time:
+Check that the variables are correctly loaded:
+
+```bash
+export -p                 # Linux / macOS
+```
+
+#### Windows (PowerShell):
+
+Export one variable at a time:
 
 ```powershell
 $env:DB_URL="..."
@@ -147,21 +175,24 @@ $env:DB_USERNAME="..."
 $env:DB_PASSWORD="..."
 ```
 
-Then run the API:
+Use `gradlew` to run the API:
 
 ```bash
-./gradlew bootRun       # Linux / macOS
 .\gradlew bootRun       # Windows
 ```
 
-To check that the variables are correctly loaded:
+Check that the variables are correctly loaded:
 
 ```bash
-export -p                 # Linux / macOS
 Get-ChildItem env:        # Windows PowerShell
 ```
 
-### Option B - In IntelliJ IDEA
+### Option B (useful if you need to modify the code) - Running from within an IDE
+
+This guide explains only for IntelliJ IDEA, since it is the IDE we recommend. (You can follow a similar approach for other IDEs.)
+
+
+#### Install a plugin 
 
 IntelliJ does not automatically load `.env` files. Install the **EnvFile** plugin (by Borys Pierov):
 
@@ -174,18 +205,21 @@ IntelliJ does not automatically load `.env` files. Install the **EnvFile** plugi
     
     ![image2](docs/images/image2.png)
     
-
 Once configured, IntelliJ automatically injects the variables on every run - no need to export them manually anymore. (this setting persists)
 
-### Result
+#### Result
 
 The API is available at:
 
 ```
 http://localhost:8080
 ```
-## 5.1 Fill the database
-Once your API is running, in another terminal, you can use the script `seed.ts` located in `frontend/src/config/`
+
+---
+
+## Populate the database
+
+Once your API is running, in a separate terminal, you can use the script `seed.ts` located in `frontend/src/config/`
 (The API must be running and the database must be empty)
 
 Run the script :
@@ -195,9 +229,9 @@ node seed.ts
 
 ---
 
-## 6. API documentation
+## API documentation
 
-Automatically generated from the `@RestController` classes (via the `springdoc-openapi-starter-webmvc-ui` dependency):
+The OpenAPI documentation can be automatically generated from the `@RestController` classes (via the `springdoc-openapi-starter-webmvc-ui` dependency):
 
 | Format | URL |
 | --- | --- |
@@ -205,11 +239,11 @@ Automatically generated from the `@RestController` classes (via the `springdoc-o
 | OpenAPI JSON | `http://localhost:8080/v3/api-docs` |
 | OpenAPI YAML | `http://localhost:8080/v3/api-docs.yaml` |
 
-To test endpoints directly without an external tool (Postman/Insomnia), IntelliJ Ultimate offers a native **Endpoints** tab (`View → Tool Windows → Endpoints`) - make sure the **Spring** and **Spring Web** plugins are enabled, otherwise the endpoints won't show up there.
+To test endpoints directly without using an external tool (such as Postman, Insomnia or Swagger), IntelliJ Ultimate offers a native **Endpoints** tab (`View → Tool Windows → Endpoints`) - make sure the **Spring** and **Spring Web** plugins are enabled, otherwise the endpoints won't show up there.
 
 ---
 
-## 7. Configure and run the frontend
+## Configure and run the frontend
 
 From the `frontend` folder:
 
@@ -217,7 +251,7 @@ From the `frontend` folder:
 npm install
 ```
 
-Create a `frontend/.env` file:
+Store the frontend environment variables in a `frontend/.env` file:
 
 ```
 VITE_API_URL=http://localhost:8080
@@ -237,15 +271,17 @@ The frontend is available at:
 http://localhost:5173
 ```
 
+**Note:** In production, `VITE_API_URL` must point to the deployed backend's public URL, and you'll also need to add the deployed frontend's address to the backend's `config/CorsConfig`.
+
 ---
 
-## 8. Full startup - summarytttrpqqpsix
+## Full startup - summary
 
-Once both `.env` files are configured (backend and frontend):
+Once the `.env` environment files for the backend and frontend have been configured and stored locally:
 
 ```bash
 # Terminal 1 - Backend (from the project root)
-export $(cat .env | xargs)   # or via IntelliJ EnvFile
+export $(cat .env | xargs)
 ./gradlew bootRun
 
 # Terminal 2 - Frontend
@@ -262,7 +298,7 @@ http://localhost:5173 (and API at http://localhost:8080)
 
 ---
 
-## 9. Troubleshooting
+## Troubleshooting
 
 | Problem | Likely cause | Solution                                      |
 | --- | --- |-----------------------------------------------|
@@ -270,26 +306,3 @@ http://localhost:5173 (and API at http://localhost:8080)
 | Cannot connect to the database via Direct connection | IPv6/IPv4 network incompatibility | Use Supabase's **Session Pooler** instead     |
 | `.env` variables not active in a new terminal | Exports don't persist across sessions | export $(cat .env \| xargs)                   |
 | Endpoints missing from the Endpoints tab (IntelliJ) | Spring/Web plugins disabled | Check they're enabled in `Settings → Plugins` |
-
----
-
-## 10. Environment variables - summary
-
-**Backend** (`.env`, at the project root):
-
-```
-DB_URL=jdbc:postgresql://[HOST]:[PORT]/postgres
-DB_USERNAME=[USERNAME]
-DB_PASSWORD=[PASSWORD]
-```
-**(postgres is the default database name in Supabase)**
-
-**Frontend** (`frontend/.env`):
-
-```
-VITE_API_URL=http://localhost:8080
-```
-
-In production, `VITE_API_URL` must point to the deployed backend's public URL, and you'll also need to add the deployed frontend's address to the backend's `config/CorsConfig`.
-
-**Never commit `.env` files** - make sure they're listed in `.gitignore`.
