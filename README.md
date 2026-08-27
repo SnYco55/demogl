@@ -25,6 +25,8 @@ PostgreSQL (Supabase)
 
 # Launch guide
 
+*If you should encounter any ambiguities, errors or incompleteness in this guide, open a ticket (Issue) in this repository to notify us.*
+
 [Lire en français](README_FR.md)
 
 The current guide explains how to install and run the project locally, from the database through the backend up to the frontend.
