@@ -1,12 +1,23 @@
-# 1. Architecture
+# Architecture
+
+Indépendant d'une OS spécifique - fonctionne sur Linux, Mac OS, Windows.
+
+## Développement
 
 - Frontend en Vue.js (TypeScript)
-- Backend en Java 25 (REST API Spring Boot (+ description OpenAPI))
-- Database en PostgreSQL (Supabase)
+- Backend en Java 25 + Spring Boot + OpenAPI REST + ORM JPA
+- Base de données relationelle en PostgreSQL
 
-# 2. App
+## Déploiement et hébergement
 
-- Une app web qui affiche la liste des membres de l'UMONS selon chaque faculté/département/service..., avec un panel d'administration qui permet d'ajouter, supprimer, et modifier les facultés, dépatements,... Dans le format d'affichage, il y a des filtres par date, on voit initialement les gens au contrat actif aujourd'hui.
+- Docker pour la containerisation du backend, hébergé sur Render
+- Frontend hébergé sur Vercel
+- Database hébergé sur Supabase
+
+# Application web
+
+- L'application web affiche la liste des membres de l'UMONS selon chaque faculté/département/service... Il y a des filtres par date, on voit initialement uniquement les membres au contrat actif aujourd'hui.
+- Un panel d'administration permet d'ajouter, supprimer, et modifier les facultés, dépatements, ...
 
 ![image3](images/image3.png)
 
@@ -14,21 +25,14 @@
 
 ![image5](images/image5.png)
 
-# 3. Docker
+#  Ordre d'exécution
 
-- Containerisation du Backend Spring Boot Java 25
+## Configuration de Spring Boot:
 
-# 4. Choix de deploiement
+Allez sur `https://spring.io/quickstart` et utilisez `https://start.spring.io/` pour créer la structure de base de votre application Spring Boot.
 
-- Frontend sur Vercel (Vue.js)
-- Backend sur Render (Docker)
-- Database sur Supabase
-
-# 5. Ordre d'exec
-
-## 5.1 API avec Spring :
-
-Allez sur https://spring.io/quickstart et utilisez https://start.spring.io/ pour créer la structure de base de votre API Spring Boot. Paramètres recommandés pour la stack choisie : (Remplacez example et demo. Configuration: Properties ou YAML n'a pas d'importance)
+Voici les paramètres recommandés pour la stack choisie:
+  (Remplacez example et demo. Configuration: Properties ou YAML n'a pas d'importance)
 
 Ajoutez les dépendances suivantes : Spring Web, Spring Data JPA, PostgreSQL Driver.
 
@@ -55,23 +59,25 @@ JSON
 Frontend
 ```
 
-## 5.2 Database supabase
+## Hébergement de la base de données sur Supabase
 
-Rendez-vous sur https://supabase.com/ et suivez les étapes pour créer un projet gratuitement. Vous serez tout au début amenés à choisir un mot de passe pour ce projet, celui-ci correspond au mot de passe de votre DB gardez-le ! 
+Rendez-vous sur `https://supabase.com/` et suivez les étapes pour créer un projet en "free plan". Vous serez tout au début amenés à choisir un mot de passe pour ce projet, celui-ci correspond au mot de passe de votre DB gardez-le ! 
 
-Comme c'est notre backend en Java qui va directement se connecter à la DB on choisit cette config dans notre cas : 
+Comme c'est le backend en Java qui va directement se connecter à la base de données, on choisit la configuration suivante : 
 
 ![image7](images/image7.png)
 
-(Vous pouvez aussi choisir Direct connection mais cette option a tendance à ne pas fonctionner correctement avec SpringBoot)
+(Vous pouvez aussi essayer Direct connection, mais par expérience cette option a tendance à ne pas fonctionner correctement avec SpringBoot)
 
-Dans votre code Java il faut allez dans votre fichier de configuration (application.properties(ou.yaml)) pour configurer la connection à votre DB
+Dans le code Java, allez dans le fichier de configuration `application.properties` ou `application.yaml` pour configurer la connection à la base de données.
 
-### 5.2.1 application.yaml (avec .env voir remarque 6.1) :
+Faites attention d'utiliser un fichier `.env` avec vos variables d'environnement, voir la section Remarques plus bas.
+
+### application.yaml
 
 ![image8](images/image8.png)
 
-### 5.2.2 application.properties (avec .env voir remarque 6.1) :
+### application.properties
 
 ```java
 spring.application.name=demo
@@ -81,21 +87,25 @@ spring.datasource.password=${DB_PASSWORD}
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-### 5.2.3 DataBase relations
+### Relations de la base de données
 
-![image9](images/image9.png)
-
+La base de données contient les relations suivantes:
 - **faculties → departments** : One-to-Many
 - **departments → services** : One-to-Many
 - **services ↔ members** : Many-to-Many
 - **members → services** : One-to-Many (director)
 - **members ↔ roles** : Many-to-Many
 
-## 5.3 Description OpenAPI
+Voici le rendu visuel, venant de Supabase:
 
-OpenAPI, Génération automatique :
+![image9](images/image9.png)
 
-- Dans build.gradle ajoutez la dépendance `'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'` qui génère automatiquement l'OpenAPI au lancement de votre code grâce aux @RestController.
+
+## Description OpenAPI
+
+La spécification OpenAPI peut être généré de manière automatique du code source Java Spring Boot:
+
+- Dans build.gradle ajoutez la dépendance `'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'` qui génère  l'OpenAPI au lancement de votre code grâce aux @RestController.
 
 ![image10](images/image10.png)
 
@@ -112,26 +122,26 @@ OpenAPI, Génération automatique :
   http://localhost:8080/v3/api-docs.yaml
 
 
-## 5.4 Frontend Vue.js
+## Frontend Vue.js
 
-**!!! À réaliser à la racine du projet, là où se trouve `build.gradle` !!!**
+*!!! Le frontend est à créer à la racine du projet, là où se trouve `build.gradle` !!!*
 
-**Prérequis et Création**
+**Prérequis et création**
 
-- Installer Node.js sur votre machine.
-- Ouvrir le terminal et taper : `npm init vue@latest`.
-- Valider l'installation de l'outil si demandé.
-- Choisir le nom du projet (ie: frontend) et activer les options souhaitées (cochez : TypeScript, Router (et si vous souhaitez Prettier).
+- Installez Node.js sur votre machine.
+- Ouvrez le terminal et tapez : `npm init vue@latest`.
+- Validez l'installation de l'outil si demandé.
+- Choisissez le nom du projet (ie: frontend) et activez les options souhaitées (cochez : TypeScript, Router (et si vous souhaitez Prettier).
 
-**Commandes de Lancement**
+**Commandes de lancement**
 
-- Entrer dans le dossier : `cd frontend`.
-- Installer les outils : `npm install`.
-- Lancer le serveur : `npm run dev`
+- Entrez dans le dossier : `cd frontend`.
+- Installez les outils : `npm install`.
+- Lancez le serveur : `npm run dev`
 
-## 5.5 Installation et utilisation de Tailwind
+## Installation et utilisation de Tailwind
 
-**!!! À réaliser à la racine du projet, là où se trouve `build.gradle` !!!**
+*!!! À réaliser à la racine du projet, là où se trouve `build.gradle` !!!*
 
 [Tailwind CSS](https://tailwindcss.com) est un framework CSS *utility-first* permettant de construire rapidement une interface à l'aide de classes CSS directement dans les composants Vue.
 
@@ -143,7 +153,7 @@ Depuis le dossier `frontend` :
 npm install tailwindcss @tailwindcss/vite
 ```
 
-Modifier ensuite `vite.config.js` :
+Modifiez ensuite `vite.config.js` :
 
 ```tsx
 import { defineConfig } from 'vite'
@@ -179,19 +189,19 @@ Quelques exemples :
 - `rounded-xl` → coins arrondis
 - `font-semibold` → texte semi-gras
 
-## 5.5 Tests
+## Tests
 
 Les tests de l'API utilisent **JUnit + Spring Boot Test + MockMvc** avec une base de données **H2 en mémoire**. Cela permet de tester les endpoints sans modifier la base Supabase.
 
 ### Configuration
 
-Ajouter H2 dans `build.gradle` dans dependencies :
+Ajoutez H2 dans les dependencies de `build.gradle` :
 
 ```
 testRuntimeOnly 'com.h2database:h2'
 ```
 
-Créer une configuration de test dans :
+Créez une configuration de test dans :
 
 ```
 src/test/resources/application.yaml (ou application.properties) 
@@ -255,9 +265,9 @@ ou uniquement une classe :
 
 Chaque test dispose d'une base H2 isolée et peut créer directement les entités nécessaires à son scénario. **Aucune donnée du seed Supabase n'est nécessaire pour les tests.**
 
-## 5.6 Déploiement
+## Déploiement
 
-### 5.6.1 Conteneuriser l'API avec Docker
+### Conteneuriser l'API avec Docker
 
 L'API Spring Boot est conteneurisée avec **Docker** afin de faciliter son déploiement sur différentes plateformes. Le conteneur contient tout ce qui est nécessaire pour compiler et exécuter l'API, sans devoir installer Java ou Gradle sur le serveur de déploiement.
 
@@ -325,7 +335,7 @@ L'API est alors accessible sur `http://localhost:8080`.
 
 En production, une plateforme comme **Render** peut construire automatiquement cette image à partir du `Dockerfile` et exécuter l'API dans un conteneur. Docker n'a donc pas besoin d'être installé sur la machine de développement pour utiliser ou déployer normalement le projet.
 
-### 5.6.2 Déploiement de l'API sur [Render](https://render.com) à l'aide de Docker
+### Déploiement de l'API sur [Render](https://render.com) à l'aide de Docker
 
 1. Connectez-vous sur le compte GitHub où se trouve le repo du projet
 2. Créez un nouveau projet Render
@@ -353,7 +363,7 @@ En production, une plateforme comme **Render** peut construire automatiquement c
    ![image15](images/image15.png)
 
 
-### 5.6.3 Déploiement du frontend sur [Vercel](https://vercel.com)
+### Déploiement du frontend sur [Vercel](https://vercel.com)
 
 1. Connectez-vous sur le compte GitHub où se trouve le repo du projet
 2. Créez un nouveau projet et sélectionnez le repo du projet que vous souhaitez déployer
@@ -370,7 +380,7 @@ En production, une plateforme comme **Render** peut construire automatiquement c
    ![image18](images/image18.png)
 
 
-### 5.6.4 Dernière étape - le CorsConfig
+### Dernière étape - le CorsConfig
 
 Actuellement l'API bloque les requêtes du frontend car elle ne connaît pas son adresse. Pour régler ça il faut aller dans le code de l'API dans `/config/CorsConfig`  et ajouter l'adresse du frontend déployé.
 
@@ -393,9 +403,9 @@ Actuellement l'API bloque les requêtes du frontend car elle ne connaît pas son
 
 Après le push de cette modification Render va automatiquement récupérer les changements sur la branche Master et redéployer !
 
-# 6. Remarques
+# Remarques
 
-## **6.1 ATTENTION .env dans IIU (SpringBoot)**
+## ATTENTION .env dans IIU (SpringBoot)**
 
 - Pour **Spring Boot,** IntelliJ IDEA Ultimate (IIU) ne gère pas automatiquement les .env. Il faut donc mettre le plugin EnvFile by Borys Pierov, qui permet d'ajouter manuellement à un setup de run un .env:
 
@@ -415,7 +425,7 @@ Après le push de cette modification Render va automatiquement récupérer les c
   Les commandes `export -p` pour Linux/macOS et `Get-ChildItem env:` pour PowerShell Windows affichent les variables d'environnement actives.
 
 
-## 6.2 .env dans frontend Vue.js
+## .env dans frontend Vue.js
 
 Pour Vue.js, comme il fonctionne avec Vite, les .env sont nativement supportés.
 
@@ -425,7 +435,7 @@ Pour Vue.js, comme il fonctionne avec Vite, les .env sont nativement supportés.
    `export const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080'`
 4. À chaque fois que vous utilisez `“http://localhost:8080/...”` pour vos appels API dans votre code faites : `import { API_URL } from "@/config/api.ts";`  et remplacez-le par :         ``${API_URL}/....``
 
-## 6.3 Essayer les endpoints de votre API à la main (post, patch, delete)
+## Essayer les endpoints de votre API à la main (post, patch, delete)
 
 Vous pouvez pour ça utiliser des outils freemium comme Insomnia ou Postman, cependant dans IntelliJ IDEA Ultimate (la version payante d'IntelliJ mais gratuite grâce à votre adresse student UMONS) il est possible de manière native et intégrée à IIU d'essayer vos endpoints. Pour ça, il suffit d'aller dans l'onglet Endpoints, soit en y naviguant grâce à Alt+Tab (ou Alt+E), soit en allant dans la barre du haut dans :      View→Tool Windows→Endpoints
 
@@ -435,7 +445,7 @@ Vous pouvez pour ça utiliser des outils freemium comme Insomnia ou Postman, cep
 
 ![image20](images/image20.png)
 
-## 6.4 inclure les messages d'erreurs dans les réponses de l'API
+## Inclure les messages d'erreurs dans les réponses de l'API
 
 Dans votre fichier application.yaml (ou équivalent application.properties) ajoutez `include-message: always` comme montré ci-dessous
 
@@ -461,7 +471,7 @@ Cela permet d'avoir, en réponse des requêtes faites à votre API, le message q
 
 ![image21](images/image21.png)
 
-## 6.5 Logs dans l'API
+## Logs dans l'API
 
 Pour activer les logs de l'API, il est possible d'activer le mode DEBUG :
 
@@ -487,7 +497,7 @@ logging:
     org.springframework.web: DEBUG
 ```
 
-## 6.6 Remplir la base de données
+## Remplir la base de données
 
 Une fois votre API lancée, dans un autre terminal, vous pouvez utiliser le script `seed.ts` situé dans `frontend/src/config/`
 (L'API doit être lancée et la base de données doit être vide)
