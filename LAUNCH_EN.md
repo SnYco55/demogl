@@ -12,14 +12,12 @@ The current guide explains how to install and run the project locally, from the 
 
 Make sure you have the following tools installed on your machine before starting:
 
-| Tool | Purpose | Version |
-| --- | --- | --- |
-| Java | To compile and run the backend | Java 25 LTS |
-| gradle | To build the backend | |
-| Node.js + npm | To run the frontend | |
-<!-- | Git | Clone the project | | -->
+| Tool | Purpose |
+| --- | --- |
+| Java 25 LTS | To compile and run the backend |
+| Node.js + npm | To run the frontend |
 
-<!-- The **Gradle Wrapper** is included in the project: no need to install Gradle separately. -->
+The **Gradle Wrapper** is included in the project: there is no need to install Gradle separately.
 
 ---
 
