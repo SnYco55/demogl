@@ -27,6 +27,6 @@ PostgreSQL (Supabase)
 
 The launch guide explains how to install and run the project locally, from the database through the backend up to the frontend.
 
-- [Launch guide in English](LAUNCH_EN.md)
-- [Guide de lancement en français](LAUNCH_FR.md)
+- [Launch guide in English](docs/LAUNCH_EN.md)
+- [Guide de lancement en français](docs/LAUNCH_FR.md)
 - A full guide is available here: [Guide complet en français](docs/GUIDE.md)
