@@ -12,14 +12,12 @@ Ce guide permet d'installer et de faire tourner le projet en local, de la base d
 
 Assurez-vous d'installer les outils logiciels suivants avant de commencer :
 
-| Outil | Usage | Version |
-| --- | --- | --- |
-| Java | Pour compiler et exécuter le backend | Java 25 LTS |
-| Gradle | Pour lancer le backend | | 
-| Node.js + npm | Pour exécuter le frontend | |
-<!-- | Git | Pour cloner le projet | -->
+| Outil | Usage | 
+| --- | --- |
+| Java 25 LTS  | Pour compiler et exécuter le backend |
+| Node.js + npm | Pour exécuter le frontend 
 
-<!-- Le **Gradle Wrapper** est inclus dans le projet : pas besoin d'installer Gradle séparément. -->
+Le **Gradle Wrapper** est inclus dans le projet : pas besoin d'installer Gradle séparément.
 
 ---
 
