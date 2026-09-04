@@ -107,6 +107,8 @@ DB_PASSWORD='mysecretpassword'
 
 ## Lancez le backend
 
+**!! Le Wi-Fi de l'UMONS bloque la connexion entre l'API et la base de données, mettez-vous en partage de 4G/5G !!**
+
 ### Option A (recommandé) - Lancez Gradle d'un terminal
 
 Chargez le contenu du `.env` dans l'environnement **avant** de lancer Gradle, depuis la racine du projet. La méthode dépend de l'OS utilisé.
