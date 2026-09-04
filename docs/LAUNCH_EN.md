@@ -108,6 +108,8 @@ DB_PASSWORD='mysecretpassword'
 
 ## Run the backend
 
+**!! UMONS Wi-Fi blocks the connection between the API and the database, switch to a 4G/5G hotspot !!**
+
 ### Option A (recommended) - Running Gradle directly from the terminal
 
 Load the `.env` file from the project root into the environment **before** running Gradle. The method depends on the OS you're using.
