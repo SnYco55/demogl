@@ -141,7 +141,7 @@ La spécification OpenAPI peut être généré de manière automatique du code s
 
 ## Installation et utilisation de Tailwind
 
-*!!! À réaliser à la racine du projet, là où se trouve `build.gradle` !!!*
+*!!! À réaliser dans le dossier frontend !!!*
 
 [Tailwind CSS](https://tailwindcss.com) est un framework CSS *utility-first* permettant de construire rapidement une interface à l'aide de classes CSS directement dans les composants Vue.
 
